@@ -18,7 +18,6 @@ This repository contains the most comprehensive documentation available for the 
 - **Complete table and field reference** for all 89 tables in the InsightVM SQL Export
 - **Visual entity relationship diagrams** showing database structure and relationships
 - **Quick lookup guide** with common use cases and query examples
-- **Schema extraction guide** for local console installations
 - **Practical examples** and best practices for vulnerability management
 
 ---
@@ -54,16 +53,6 @@ Visual database schema representation
 - **Fact vs. dimension table** organization as understood
 - **Many-to-many relationships** and bridge tables as identified
 - **Comprehensive schema map** for all 89 tables
-
-### [🔧 Schema Extraction Guide](./RAPID7_SCHEMA_EXTRACTION_GUIDE.md)
-
-Step-by-step guide for extracting schema from local console
-
-- **Prerequisites** and assumptions
-- **Detailed extraction process** with commands
-- **Validation steps** to verify successful extraction
-- **Troubleshooting guide** for common issues
-- **Security considerations** and rollback instructions
 
 ### [📄 Machine-Readable Schema Files](./SCHEMA_FILES_README.md)
 
@@ -102,7 +91,6 @@ JSON schema files for automation, query building, and MCP development
 1. **Start with** [Quick Table Lookup](./QUICK_TABLE_LOOKUP.md) for immediate answers
 2. **Reference** [Complete Table Reference](./COMPLETE_TABLE_REFERENCE.md) for detailed field information
 3. **Use** [Entity Relationship Diagram](./RAPID7_INSIGHTVM_ERD.md) to understand table relationships
-4. **Follow** [Schema Extraction Guide](./RAPID7_SCHEMA_EXTRACTION_GUIDE.md) for local console setup
 
 ### For Developers and Integrators
 
@@ -110,7 +98,6 @@ JSON schema files for automation, query building, and MCP development
 2. **Review** the [Complete Table Reference](./COMPLETE_TABLE_REFERENCE.md) for API understanding
 3. **Study** the [Entity Relationship Diagram](./RAPID7_INSIGHTVM_ERD.md) for data modeling
 4. **Use** the [Quick Table Lookup](./QUICK_TABLE_LOOKUP.md) for common query patterns
-5. **Extract** schema using the [Schema Extraction Guide](./RAPID7_SCHEMA_EXTRACTION_GUIDE.md)
 
 ---
 
@@ -201,7 +188,7 @@ ORDER BY fap.rule_compliance ASC;
 - **Rapid7 InsightVM** with SQL Query Export enabled
 - **Database access** (local console or hosted)
 - **SQL knowledge** for query construction
-- **PostgreSQL** (for local console extraction)
+- **PostgreSQL** (for local console access)
 
 ### Supported Versions
 
