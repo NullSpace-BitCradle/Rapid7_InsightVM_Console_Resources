@@ -1,0 +1,4335 @@
+{
+  "schema": {
+    "name": "rapid7_insightvm_sql_export",
+    "version": "1.0.0",
+    "description": "Rapid7 InsightVM SQL Query Export Schema - Complete machine-readable reference",
+    "source": "Generated from COMPLETE_TABLE_REFERENCE.md and RAPID7_INSIGHTVM_ERD.md",
+    "disclaimer": "This schema represents the most complete reference available but is not officially verified by Rapid7",
+    "statistics": {
+      "total_tables": 89,
+      "dimension_tables": 64,
+      "fact_tables": 25,
+      "functions": 0
+    },
+    "tables": {
+      "dim_aggregated_credential_status": {
+        "type": "dimension",
+        "description": "The description of the aggregated credential status.",
+        "primary_key": "aggregated_credential_status_id",
+        "fields": {
+          "aggregated_credential_status_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the aggregated credential status."
+          },
+          "aggregated_credential_status_description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The description of the aggregated credential status."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset": {
+        "type": "dimension",
+        "description": "The date and time the asset was last assessed for vulnerabilities.",
+        "primary_key": "asset_id",
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the asset."
+          },
+          "mac_address": {
+            "type": "macaddr",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The primary or best MAC address associated to the asset in the scan."
+          },
+          "ip_address": {
+            "type": "inet",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The primary IP address of the asset."
+          },
+          "host_name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The primary host name of the asset. If a host name was used to detect the asset, this name will be preferred."
+          },
+          "operating_system_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the primary operating system detected on the asset.",
+            "foreign_key": "dim_operating_system"
+          },
+          "host_type_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the host type (e.g., Guest, Hypervisor, Physical, Virtual).",
+            "foreign_key": "dim_host_type"
+          },
+          "match_value": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The value used to match and uniquely identify the asset across scans."
+          },
+          "sites": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A comma-delimited list of sites the asset is currently a part of (sorted by name ascending). This column can be used a simple and conventient alternative to querying against dim_site_asset to retrieve the individual relationships."
+          },
+          "last_assessed_for_vulnerabilities": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date and time the asset was last assessed for vulnerabilities."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_container": {
+        "type": "dimension",
+        "description": "The repository of the image the container was based on.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "container_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the container."
+          },
+          "name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the container."
+          },
+          "status": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The status of the container (one of 'CREATED', 'RUNNING', 'PAUSED', 'RESTARTING', 'EXITED', 'DEAD', or 'UNKNOWN;')"
+          },
+          "created": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date that the container was created."
+          },
+          "started": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date the container last started."
+          },
+          "finished": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date the container last finished running."
+          },
+          "image_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the image the container was based from."
+          },
+          "digest": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The digest of the image the container was based on."
+          },
+          "repository": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The repository of the image the container was based on."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_file": {
+        "type": "dimension",
+        "description": "The size of the file or directory in bytes. If the size is unknown, or the file is a directory, the value will be -1.",
+        "primary_key": "file_id",
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "file_id": {
+            "type": "bigint",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the file or directory."
+          },
+          "type": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The type of the file. Either 'Directory', 'File' or 'Unknown'."
+          },
+          "name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the file or directory."
+          },
+          "size": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The size of the file or directory in bytes. If the size is unknown, or the file is a directory, the value will be -1."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_group": {
+        "type": "dimension",
+        "description": "Indicates whether the assets belonging to the group are defined statically by an user, or can change automatically based on asset metadata. If true, the membership of the group is dynamically changed whenever scans are performed on assets and the metadata and vulnerabilities related to the asset change. If false, the membership is static and defined manually by a group administrator.",
+        "primary_key": "asset_group_id",
+        "fields": {
+          "asset_group_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the asset group."
+          },
+          "name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the asset groups which provides a human-readable identifier of the group. Asset groups names are guaranteed to be unique across multiple groups."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A description of the asset group that indicates the content, purpose, or composition of a group."
+          },
+          "dynamic_membership": {
+            "type": "bool",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Indicates whether the assets belonging to the group are defined statically by an user, or can change automatically based on asset metadata. If true, the membership of the group is dynamically changed whenever scans are performed on assets and the metadata and vulnerabilities related to the asset change. If false, the membership is static and defined manually by a group administrator."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_group_account": {
+        "type": "dimension",
+        "description": "The name of the group account.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the group account."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_group_asset": {
+        "type": "dimension",
+        "description": "The unique identifier of the asset.",
+        "primary_key": null,
+        "fields": {
+          "asset_group_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset group.",
+            "foreign_key": "dim_asset_group"
+          },
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_host_name": {
+        "type": "dimension",
+        "description": "The identifier of the source type from which the host name was detected.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "host_name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A host name that was detected on the asset."
+          },
+          "source_type_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the source type from which the host name was detected."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_ip_address": {
+        "type": "dimension",
+        "description": "The type of IP address (e.g., 'IPv4' or 'IPv6').",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "ip_address": {
+            "type": "inet",
+            "primary_key": false,
+            "nullable": true,
+            "description": "An IP address associated with the asset."
+          },
+          "type": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The type of IP address (e.g., 'IPv4' or 'IPv6')."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_mac_address": {
+        "type": "dimension",
+        "description": "A MAC address associated with the asset.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "mac_address": {
+            "type": "macaddr",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A MAC address associated with the asset."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_operating_system": {
+        "type": "dimension",
+        "description": "The certainty of the fingerprint, expressed as a decimal confidence between 0 (low) and 1.0 (high).",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "operating_system_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the operating system detected.",
+            "foreign_key": "dim_operating_system"
+          },
+          "fingerprint_source_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the fingerprint source used to detect the operating system.",
+            "foreign_key": "dim_fingerprint_source"
+          },
+          "certainty": {
+            "type": "real",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The certainty of the fingerprint, expressed as a decimal confidence between 0 (low) and 1.0 (high)."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_scan": {
+        "type": "dimension",
+        "description": "The match value used to identify the asset in the scan.",
+        "primary_key": null,
+        "fields": {
+          "scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the scan.",
+            "foreign_key": "dim_scan"
+          },
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "scan_started": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the scan started."
+          },
+          "scan_finished": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the scan ended."
+          },
+          "match_value": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The match value used to identify the asset in the scan."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_service": {
+        "type": "dimension",
+        "description": "The certainty of the service fingerprint that detected the service, expressed as a decimal confidence between 0 (low) and 1.0 (high).",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "service_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the service.",
+            "foreign_key": "dim_service"
+          },
+          "protocol_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the protocol.",
+            "foreign_key": "dim_protocol"
+          },
+          "port": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The port the service is running on."
+          },
+          "service_fingerprint_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the service fingerprint."
+          },
+          "certainty": {
+            "type": "real",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The certainty of the service fingerprint that detected the service, expressed as a decimal confidence between 0 (low) and 1.0 (high)."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_service_configuration": {
+        "type": "dimension",
+        "description": "The port the service is running on.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "service_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the service.",
+            "foreign_key": "dim_service"
+          },
+          "name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the configuration value (e.g. 'http.banner', 'ssl.cert.sig.alg.name', etc)."
+          },
+          "value": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The value of the configuration (e.g. 'Microsoft-IIS/7.5', 'SHA1withRSA', etc)."
+          },
+          "port": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The port the service is running on."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_service_credential": {
+        "type": "dimension",
+        "description": "The unique identifier of the credential status.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "service_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the service.",
+            "foreign_key": "dim_service"
+          },
+          "port": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The port on which the service was running."
+          },
+          "protocol_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the protocol.",
+            "foreign_key": "dim_protocol"
+          },
+          "credential_status_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the credential status.",
+            "foreign_key": "dim_credential_status"
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_software": {
+        "type": "dimension",
+        "description": "The unique identifier of the fingerprint source used to detect the software.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "software_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the software detected on the asset.",
+            "foreign_key": "dim_software"
+          },
+          "fingerprint_source_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the fingerprint source used to detect the software.",
+            "foreign_key": "dim_fingerprint_source"
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_unique_id": {
+        "type": "dimension",
+        "description": "The unique identifier enumerated on the asset.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "source": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The source used to discover the unique identifier (e.g. 'WML' or 'system_profiler', etc)"
+          },
+          "unique_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier enumerated on the asset."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_user_account": {
+        "type": "dimension",
+        "description": "The longer name, or description, of the user account.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The short, login name associated with the user account. This value may be null, but is typically non-null."
+          },
+          "full_name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The longer name, or description, of the user account."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_vulnerability_best_solution": {
+        "type": "dimension",
+        "description": "The unique identifier of the best remediation solution for this vulnerability on this asset.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability.",
+            "foreign_key": "dim_vulnerability"
+          },
+          "solution_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the best remediation solution for this vulnerability on this asset.",
+            "foreign_key": "dim_solution"
+          }
+        },
+        "relationships": {}
+      },
+      "dim_asset_vulnerability_solution": {
+        "type": "dimension",
+        "description": "The unique identifier of a remediation solution for this vulnerability on this asset.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability.",
+            "foreign_key": "dim_vulnerability"
+          },
+          "solution_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of a remediation solution for this vulnerability on this asset.",
+            "foreign_key": "dim_solution"
+          }
+        },
+        "relationships": {}
+      },
+      "dim_credential_status": {
+        "type": "dimension",
+        "description": "The description of the credential status (e.g., 'All Credentials Failed', 'Partial Success', 'Success').",
+        "primary_key": "credential_status_id",
+        "fields": {
+          "credential_status_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the credential status."
+          },
+          "credential_status_description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The description of the credential status (e.g., 'All Credentials Failed', 'Partial Success', 'Success')."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_exception_reason": {
+        "type": "dimension",
+        "description": "The description of why the vulnerability exception was submitted (e.g., 'Acceptable Use', 'Compensating Control', 'False Positive').",
+        "primary_key": "reason_id",
+        "fields": {
+          "reason_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the exception reason."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The description of why the vulnerability exception was submitted (e.g., 'Acceptable Use', 'Compensating Control', 'False Positive')."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_exception_scope": {
+        "type": "dimension",
+        "description": "A detailed description of the exception scope level.",
+        "primary_key": "scope_id",
+        "fields": {
+          "scope_id": {
+            "type": "text",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the exception scope (e.g., 'G' for Global, 'D' for Asset, 'I' for Instance, 'S' for Site)."
+          },
+          "short_description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A short description of the exception scope."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A detailed description of the exception scope level."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_exception_status": {
+        "type": "dimension",
+        "description": "The description of the exception status (e.g., 'Approved', 'Rejected', 'Under Review', 'Expired').",
+        "primary_key": "status_id",
+        "fields": {
+          "status_id": {
+            "type": "text",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the exception status."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The description of the exception status (e.g., 'Approved', 'Rejected', 'Under Review', 'Expired')."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_fingerprint_source": {
+        "type": "dimension",
+        "description": "The source of the fingerprint (e.g., 'WMI', 'Registry', 'File System').",
+        "primary_key": "fingerprint_source_id",
+        "fields": {
+          "fingerprint_source_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the fingerprint source."
+          },
+          "source": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The source of the fingerprint (e.g., 'WMI', 'Registry', 'File System')."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_host_type": {
+        "type": "dimension",
+        "description": "The description of the host type (e.g., 'Guest', 'Hypervisor', 'Physical', 'Virtual').",
+        "primary_key": "host_type_id",
+        "fields": {
+          "host_type_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the host type."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The description of the host type (e.g., 'Guest', 'Hypervisor', 'Physical', 'Virtual')."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_operating_system": {
+        "type": "dimension",
+        "description": "The Common Platform Enumeration (CPE) identifier for the operating system.",
+        "primary_key": "operating_system_id",
+        "fields": {
+          "operating_system_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the operating system."
+          },
+          "asset_type": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The type of asset (e.g., 'Guest', 'Hypervisor', 'Physical', 'Virtual')."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A full description of the operating system including vendor, family, name, version, and architecture."
+          },
+          "vendor": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The vendor of the operating system (e.g., 'Microsoft', 'Red Hat', 'Apple')."
+          },
+          "family": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The family of the operating system (e.g., 'Windows', 'Linux', 'Mac OS X')."
+          },
+          "name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the operating system (e.g., 'Windows Server 2019', 'Ubuntu')."
+          },
+          "version": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The version of the operating system."
+          },
+          "architecture": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The system architecture (e.g., 'x86', 'x64', 'ARM')."
+          },
+          "system": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The system description combining vendor and family."
+          },
+          "cpe": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The Common Platform Enumeration (CPE) identifier for the operating system."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_policy": {
+        "type": "dimension",
+        "description": "The category of the policy.",
+        "primary_key": "policy_id",
+        "fields": {
+          "policy_id": {
+            "type": "bigint",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of a policy."
+          },
+          "scope": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The scope of the policy (e.g., 'asset', 'asset-group', 'global', 'site')."
+          },
+          "title": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The title of the policy as visible to the user."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A description of the policy."
+          },
+          "total_rules": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of rules defined in the policy."
+          },
+          "benchmark_name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the benchmark standard the policy is based on (e.g., 'CIS', 'DISA STIG', 'PCI DSS')."
+          },
+          "benchmark_version": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The version of the benchmark standard."
+          },
+          "category": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The category of the policy."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_policy_group": {
+        "type": "dimension",
+        "description": "The number of all rules including rule of a group's sub-groups.",
+        "primary_key": null,
+        "fields": {
+          "policy_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the policy.",
+            "foreign_key": "dim_policy"
+          },
+          "scope": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The scope of the policy (e.g., 'asset', 'asset-group', 'global', 'site')."
+          },
+          "group_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the group."
+          },
+          "group_name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of policy group."
+          },
+          "title": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The title of the group, for each policy, that is visible to the user."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A description of the group."
+          },
+          "parent_group_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of a group in the policy that a group directly belongs to."
+          },
+          "sub_groups": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of groups descending from a group"
+          },
+          "rules": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of all rules including rule of a group's sub-groups."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_policy_override": {
+        "type": "dimension",
+        "description": "The identifier of the scope to which the override applies.",
+        "primary_key": "override_id",
+        "fields": {
+          "override_id": {
+            "type": "bigint",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the policy override."
+          },
+          "submitted_by": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The login name of the user who submitted the override."
+          },
+          "submit_time": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the override was submitted."
+          },
+          "comments": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Comments provided when the override was submitted."
+          },
+          "reviewed_by": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The login name of the user who reviewed the override."
+          },
+          "review_comments": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Comments provided when the override was reviewed."
+          },
+          "review_state_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the review state."
+          },
+          "effective_time": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the override becomes effective."
+          },
+          "expiration_time": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the override expires."
+          },
+          "new_status_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the new status applied by the override."
+          },
+          "scope_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the scope to which the override applies."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_policy_result_status": {
+        "type": "dimension",
+        "description": "The description of the policy result status (e.g., 'Pass', 'Fail', 'Not Applicable', 'Error').",
+        "primary_key": "status_id",
+        "fields": {
+          "status_id": {
+            "type": "text",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the policy result status."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The description of the policy result status (e.g., 'Pass', 'Fail', 'Not Applicable', 'Error')."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_policy_rule": {
+        "type": "dimension",
+        "description": "The boolean to determine whether this rule is enabled.",
+        "primary_key": "rule_id",
+        "fields": {
+          "policy_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the policy.",
+            "foreign_key": "dim_policy"
+          },
+          "scope": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The scope of the policy rule (e.g., 'asset', 'asset-group', 'global', 'site')."
+          },
+          "rule_id": {
+            "type": "bigint",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The identifier of the policy rule."
+          },
+          "title": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The title of the rule, for each policy, that is visible to the user. It describes a state or condition with which a tested asset should comply."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A description of the rule."
+          },
+          "parent_group_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of a group in the policy that a rule directly belongs to."
+          },
+          "severity": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The severity of the rule. A textual value that can be one of the following: \"low\", \"medium\", \"high\", or \"unknown\"."
+          },
+          "rationale": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Descriptive text explaining why compliance is important to the security of the target platform."
+          },
+          "remediation": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Instructions for remediating the non-compliant rule."
+          },
+          "role": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The rule's role in scoring and reporting: \"full\", \"unchecked\" and \"unscored\"."
+          },
+          "enabled": {
+            "type": "bool",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The boolean to determine whether this rule is enabled."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_policy_rule_cce_platform_nist_control_mapping": {
+        "type": "dimension",
+        "description": "The date published of the control mapping.",
+        "primary_key": null,
+        "fields": {
+          "rule_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the policy rule.",
+            "foreign_key": "dim_policy_rule"
+          },
+          "rule_scope": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The scope of the policy rule (e.g., 'asset', 'asset-group', 'global', 'site')."
+          },
+          "cce_item_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the CCE item."
+          },
+          "platform": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The platform of the CCE."
+          },
+          "control_name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the control mapping."
+          },
+          "date_published": {
+            "type": "date",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date published of the control mapping."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_policy_rule_test": {
+        "type": "dimension",
+        "description": "The expected value for the entity in the test.",
+        "primary_key": "test_id",
+        "fields": {
+          "test_id": {
+            "type": "text",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the policy rule test."
+          },
+          "test_type": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The type of the policy rule test."
+          },
+          "test_name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the policy rule test."
+          },
+          "test_version": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The version of the policy rule test."
+          },
+          "rule_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the policy rule.",
+            "foreign_key": "dim_policy_rule"
+          },
+          "entity_name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the entity being tested (e.g., registry key, file path, service name)."
+          },
+          "operation": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The comparison operation used in the test (e.g., 'equals', 'less than', 'pattern match')."
+          },
+          "entity_value": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The expected value for the entity in the test."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_protocol": {
+        "type": "dimension",
+        "description": "A description of the protocol.",
+        "primary_key": "protocol_id",
+        "fields": {
+          "protocol_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the protocol."
+          },
+          "name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the protocol (e.g., 'TCP', 'UDP', 'ICMP')."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A description of the protocol."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_scan": {
+        "type": "dimension",
+        "description": "The user-driven scan name for the scan.",
+        "primary_key": "scan_id",
+        "fields": {
+          "scan_id": {
+            "type": "bigint",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the scan."
+          },
+          "started": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the scan started."
+          },
+          "finished": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the scan ended, which may be NULL if a scan is still in progress."
+          },
+          "status_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the scan status.",
+            "foreign_key": "dim_scan_status"
+          },
+          "type_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the scan type.",
+            "foreign_key": "dim_scan_type"
+          },
+          "scan_name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The user-driven scan name for the scan."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_scan_engine": {
+        "type": "dimension",
+        "description": "The date and time the scan engine was last refreshed.",
+        "primary_key": "scan_engine_id",
+        "fields": {
+          "scan_engine_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the scan engine."
+          },
+          "name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the scan engine."
+          },
+          "address": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The address (either IP or host name) of the scan engine."
+          },
+          "port": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The port the scan engine is running on."
+          },
+          "priority": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The priority of the scan engine."
+          },
+          "last_refreshed": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date and time the scan engine was last refreshed."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_scan_status": {
+        "type": "dimension",
+        "description": "The description of the scan status (e.g., 'Running', 'Finished', 'Stopped', 'Error', 'Paused', 'Aborted', 'Unknown').",
+        "primary_key": "status_id",
+        "fields": {
+          "status_id": {
+            "type": "text",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the scan status."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The description of the scan status (e.g., 'Running', 'Finished', 'Stopped', 'Error', 'Paused', 'Aborted', 'Unknown')."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_scan_template": {
+        "type": "dimension",
+        "description": "The verbose description of the scan template.",
+        "primary_key": "scan_template_id",
+        "fields": {
+          "scan_template_id": {
+            "type": "text",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the scan template."
+          },
+          "name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The short, human-readable name of the scan template."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The verbose description of the scan template."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_scan_type": {
+        "type": "dimension",
+        "description": "The description of the scan type (e.g., 'Manual', 'Scheduled', 'Agent').",
+        "primary_key": "type_id",
+        "fields": {
+          "type_id": {
+            "type": "text",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the scan type."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The description of the scan type (e.g., 'Manual', 'Scheduled', 'Agent')."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_scope_asset_group": {
+        "type": "dimension",
+        "description": "The unique identifier of the asset group that is within the report scope.",
+        "primary_key": null,
+        "fields": {
+          "asset_group_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset group that is within the report scope.",
+            "foreign_key": "dim_asset_group"
+          }
+        },
+        "relationships": {}
+      },
+      "dim_scope_site": {
+        "type": "dimension",
+        "description": "The unique identifier of the site that is within the report scope.",
+        "primary_key": null,
+        "fields": {
+          "site_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the site that is within the report scope.",
+            "foreign_key": "dim_site"
+          }
+        },
+        "relationships": {}
+      },
+      "dim_service": {
+        "type": "dimension",
+        "description": "The name of the service (e.g., 'HTTP', 'HTTPS', 'SSH', 'FTP', 'SMTP').",
+        "primary_key": "service_id",
+        "fields": {
+          "service_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the service."
+          },
+          "name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the service (e.g., 'HTTP', 'HTTPS', 'SSH', 'FTP', 'SMTP')."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_service_fingerprint": {
+        "type": "dimension",
+        "description": "The version of the service.",
+        "primary_key": "service_fingerprint_id",
+        "fields": {
+          "service_fingerprint_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the service fingerprint."
+          },
+          "vendor": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The vendor of the service (e.g., 'Apache', 'Microsoft', 'Cisco')."
+          },
+          "family": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The family of the service (e.g., 'HTTP Server', 'Database')."
+          },
+          "name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the service (e.g., 'Apache HTTP Server', 'IIS')."
+          },
+          "version": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The version of the service."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_site": {
+        "type": "dimension",
+        "description": "The zip-code (if applicable) of the organization the site is associated to.",
+        "primary_key": "site_id",
+        "fields": {
+          "site_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the site."
+          },
+          "name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the site which provides a human-readable identifier of the site. Site names are guaranteed to be unique across multiple sites."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "An optional description of the site that indicates the content, purpose, or composition of a site."
+          },
+          "importance": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A human-readable description of the importance of site, one of the values: 'Very Low', 'Low', 'Normal', 'High' or 'Very High'"
+          },
+          "dynamic_targets": {
+            "type": "bool",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Indicates whether the targets defined within the site are dynamically configured based on a discovery connection. If true, a discovery connection is the means by which the targets of a site are defined and dynamically updated. If false, the target definition is static and manually configured by a site administrator."
+          },
+          "risk_factor": {
+            "type": "real",
+            "primary_key": false,
+            "nullable": true,
+            "description": "An adjustment factor for the risk of a site. The weighting factor defaults to 1.0 and can be adjusted up or down as the importance of a site is changed. The higher the importance, the larger the risk factor, and the lower the importance, the lower the risk factor."
+          },
+          "last_scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the scan that last ran for the site. If the site has not had a scan run, the value will be NULL.",
+            "foreign_key": "dim_scan"
+          },
+          "previous_scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the scan that ran prior to the last scan for the site. If the site has not had a scan run, the value will be NULL.",
+            "foreign_key": "dim_scan"
+          },
+          "organization_name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The optional name of the organization the site is associated to."
+          },
+          "organization_url": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The URL/website of the organization the site is associated to."
+          },
+          "organization_contact": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The contact name for the contact of the organization the site is associated to."
+          },
+          "organization_job_title": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The job title of the contact of the organization the site isassociated to."
+          },
+          "organization_email": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The email address of the contact of the organization the site is associated to."
+          },
+          "organization_phone": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The phone number of the organization the site is associated to."
+          },
+          "organization_address": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The address of the organization the site is associated to."
+          },
+          "organization_city": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The city/region of the organization the site is associated to."
+          },
+          "organization_state": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The state/county/province/territory of the organization of the site."
+          },
+          "organization_country": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The country of organization the site is associated to."
+          },
+          "organization_zip": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The zip-code (if applicable) of the organization the site is associated to."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_site_asset": {
+        "type": "dimension",
+        "description": "The unique identifier of the asset.",
+        "primary_key": null,
+        "fields": {
+          "site_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the site.",
+            "foreign_key": "dim_site"
+          },
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          }
+        },
+        "relationships": {}
+      },
+      "dim_site_scan": {
+        "type": "dimension",
+        "description": "The unique identifier of the scan.",
+        "primary_key": null,
+        "fields": {
+          "site_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the site.",
+            "foreign_key": "dim_site"
+          },
+          "scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the scan.",
+            "foreign_key": "dim_scan"
+          }
+        },
+        "relationships": {}
+      },
+      "dim_site_scan_config": {
+        "type": "dimension",
+        "description": "The unique identifier of the scan engine configured for the site.",
+        "primary_key": "site_id",
+        "fields": {
+          "site_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the site.",
+            "foreign_key": "dim_site"
+          },
+          "scan_template_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the scan template configured for the site.",
+            "foreign_key": "dim_scan_template"
+          },
+          "scan_engine_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the scan engine configured for the site.",
+            "foreign_key": "dim_scan_engine"
+          }
+        },
+        "relationships": {}
+      },
+      "dim_site_target": {
+        "type": "dimension",
+        "description": "The scope of an exclusion, either 'global' if the exclusion is a global exclusion, 'site' if the exclusion is defined on the site, or NULL if included is true.",
+        "primary_key": null,
+        "fields": {
+          "site_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the site.",
+            "foreign_key": "dim_site"
+          },
+          "type": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Either 'host' or 'ip' to indicate the type of address."
+          },
+          "included": {
+            "type": "bool",
+            "primary_key": false,
+            "nullable": true,
+            "description": "True if the target is included in the configuration, or false if it is excluded."
+          },
+          "target": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "If type is 'host', this is the host name."
+          },
+          "scope": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The scope of an exclusion, either 'global' if the exclusion is a global exclusion, 'site' if the exclusion is defined on the site, or NULL if included is true."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_software": {
+        "type": "dimension",
+        "description": "The Common Platform Enumeration (CPE) identifier for the software.",
+        "primary_key": "software_id",
+        "fields": {
+          "software_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the software."
+          },
+          "vendor": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The vendor of the software (e.g., 'Microsoft', 'Oracle', 'Adobe')."
+          },
+          "family": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The family of the software (e.g., 'Windows', 'Office', 'Java')."
+          },
+          "name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the software (e.g., 'Microsoft Office', 'Adobe Reader')."
+          },
+          "version": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The version of the software."
+          },
+          "software_class": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The class or type of software (e.g., 'Application', 'Operating System', 'Driver')."
+          },
+          "cpe": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The Common Platform Enumeration (CPE) identifier for the software."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_solution": {
+        "type": "dimension",
+        "description": "Textual representation of the types of system, software, and/or services that the solution can be applied to. If the solution is not restricted to a certain type of system, software or service, this field will be NULL.",
+        "primary_key": "solution_id",
+        "fields": {
+          "solution_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the solution."
+          },
+          "nexpose_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The key/identifier of the solution that uniquely identifies it within Nexpose."
+          },
+          "estimate": {
+            "type": "interval",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The amount of required time estimated to implement this solution on a single asset. This is a heuristic and may not represent the actually time required to remediate or apply the solution, depending on the environment and tools available for remediation."
+          },
+          "url": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "An optional URL link defined for getting more information about the solution. When defined, this may be a web page defined by the vendor that provides more details on the solution, or it may be a download link to a patch."
+          },
+          "solution_type": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Type of the solution, one of the values: 'PATCH', 'ROLLUP' or 'WORKAROUND'."
+          },
+          "fix": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The steps that are a part of the fix this solution prescribes. The fix will usually contain a list of procedures that must be followed to remediate the vulnerability. The fix is represented using HTML markup that can be \"flattened\" using the htmlToText() function."
+          },
+          "summary": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A short summary of solution which describes the purpose of the solution at a high level and is suitable for use as a summarization of the solution. The summary is represented using HTML markup that can be \"flattened\" using the htmlToText() function."
+          },
+          "additional_data": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Additional information about the solution. The additional data is represented using HTML markup that can be \"flattened\" using the htmlToText() function."
+          },
+          "applies_to": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Textual representation of the types of system, software, and/or services that the solution can be applied to. If the solution is not restricted to a certain type of system, software or service, this field will be NULL."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_solution_highest_supercedence": {
+        "type": "dimension",
+        "description": "The identifier of a solution that is known to supercede the solution, and which itself is not superceded (the highest level of supercedence). If the solution is not superceded, this is the same identifier as solution_id.",
+        "primary_key": null,
+        "fields": {
+          "solution_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the solution.",
+            "foreign_key": "dim_solution"
+          },
+          "superceding_solution_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of a solution that is known to supercede the solution, and which itself is not superceded (the highest level of supercedence). If the solution is not superceded, this is the same identifier as solution_id.",
+            "foreign_key": "dim_solution"
+          }
+        },
+        "relationships": {}
+      },
+      "dim_solution_prerequisite": {
+        "type": "dimension",
+        "description": "The unique identifier of the prerequisite solution.",
+        "primary_key": null,
+        "fields": {
+          "solution_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the solution.",
+            "foreign_key": "dim_solution"
+          },
+          "required_solution_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the prerequisite solution.",
+            "foreign_key": "dim_solution"
+          }
+        },
+        "relationships": {}
+      },
+      "dim_solution_supercedence": {
+        "type": "dimension",
+        "description": "The unique identifier of the superceding solution.",
+        "primary_key": null,
+        "fields": {
+          "solution_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the solution.",
+            "foreign_key": "dim_solution"
+          },
+          "superceding_solution_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the superceding solution.",
+            "foreign_key": "dim_solution"
+          }
+        },
+        "relationships": {}
+      },
+      "dim_tag": {
+        "type": "dimension",
+        "description": "The optional color of the tag, in hexadecimal notation.",
+        "primary_key": "tag_id",
+        "fields": {
+          "tag_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the tag."
+          },
+          "tag_name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the tag."
+          },
+          "tag_type": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The type of tag (e.g., 'CRITICALITY', 'CUSTOM', 'LOCATION', 'OWNER')."
+          },
+          "source": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The original application that created the tag."
+          },
+          "creation_date": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date and time the tag was created."
+          },
+          "risk_modifier": {
+            "type": "float8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The risk modifier for a CRITICALITY typed tag."
+          },
+          "color": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The optional color of the tag, in hexadecimal notation."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_tag_asset": {
+        "type": "dimension",
+        "description": "The identifier of the asset group through which the tag is associated with the asset, if applicable.",
+        "primary_key": null,
+        "fields": {
+          "tag_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the tag.",
+            "foreign_key": "dim_tag"
+          },
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "association": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The type of association between the tag and asset (e.g., 'Direct', 'Site', 'Group')."
+          },
+          "site_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the site through which the tag is associated with the asset, if applicable."
+          },
+          "group_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the asset group through which the tag is associated with the asset, if applicable."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_vulnerability": {
+        "type": "dimension",
+        "description": "The total number of distinct malware kits that are known to exploit the vulnerability.",
+        "primary_key": "vulnerability_id",
+        "fields": {
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the vulnerability."
+          },
+          "nexpose_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The Nexpose identifier (natural key) of the vulnerability."
+          },
+          "title": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A short, human-readable description of the vulnerability. The title is represented using HTML markup that can be \"flattened\" using the htmlToText() function."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A verbose description for the vulnerability. The description is represented using HTML markup that can be \"flattened\" using the htmlToText() function."
+          },
+          "date_published": {
+            "type": "date",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date that the vulnerability was publicized by the third-party, vendor, or another authoring source. The granularity of the date is a day."
+          },
+          "date_added": {
+            "type": "date",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date that the vulnerability was first checked by Nexpose. The granularity of the date is a day."
+          },
+          "date_modified": {
+            "type": "date",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date that the vulnerability was last modified. The granularity of the date is a day."
+          },
+          "severity_score": {
+            "type": "smallint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The numerical severity of the vulnerability, measured on a scale of 0 to 10 using whole numbers."
+          },
+          "severity": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The textual representation of the severity of the vulnerability, which is based on the severity score. The severity can be any of the following values: 'Critical', 'Severe', or 'Moderate'"
+          },
+          "pci_severity_score": {
+            "type": "smallint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The numerical PCI severity score of the vulnerability, measured on a scale of 1 to 5 using whole numbers."
+          },
+          "pci_status": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The compliance level of the vulnerability according to PCI standards. 'Pass' indicates the vulnerability may be present on an asset but still pass PCI compliance. 'Fail' indicates the vulnerability must not be present in order to pass PCI compliance."
+          },
+          "riskscore": {
+            "type": "float8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The aggregate risk score."
+          },
+          "cvss_vector": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The full CVSS vector in CVSS Version 2.0 notation."
+          },
+          "cvss_access_vector_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier for the CVSS access vector (e.g., 'L' for Local, 'A' for Adjacent Network, 'N' for Network)."
+          },
+          "cvss_access_complexity_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier for the CVSS access complexity (e.g., 'H' for High, 'M' for Medium, 'L' for Low)."
+          },
+          "cvss_authentication_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier for the CVSS authentication requirement (e.g., 'M' for Multiple, 'S' for Single, 'N' for None)."
+          },
+          "cvss_confidentiality_impact_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier for the CVSS confidentiality impact (e.g., 'N' for None, 'P' for Partial, 'C' for Complete)."
+          },
+          "cvss_integrity_impact_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier for the CVSS integrity impact (e.g., 'N' for None, 'P' for Partial, 'C' for Complete)."
+          },
+          "cvss_availability_impact_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier for the CVSS availability impact (e.g., 'N' for None, 'P' for Partial, 'C' for Complete)."
+          },
+          "pci_adjusted_cvss_score": {
+            "type": "real",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Value between 0 and 10 representing the CVSS score of the vulnerability, adjusted if necessary to follow PCI rules."
+          },
+          "cvss_score": {
+            "type": "real",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Value between 0 and 10 representing the CVSS score of the vulnerability."
+          },
+          "cvss_exploit_score": {
+            "type": "real",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Base score for the exploitability of a vulnerability that is used to compute the overall CVSS score."
+          },
+          "cvss_impact_score": {
+            "type": "real",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Base score for the impact of a vulnerability that is used to compute the overall CVSS score."
+          },
+          "cvss_v2_score": {
+            "type": "real",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The overall CVSS v2.0 score of the vulnerability, ranging from 0 to 10."
+          },
+          "cvss_v2_exploit_score": {
+            "type": "real",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The CVSS v2.0 exploitability score of the vulnerability."
+          },
+          "cvss_v2_impact_score": {
+            "type": "real",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The CVSS v2.0 impact score of the vulnerability."
+          },
+          "cvss_v3_vector": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The full CVSS vector in CVSS Version 3.0 notation."
+          },
+          "cvss_v3_attack_vector": {
+            "type": "varchar( 1 )",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Attack Vector (AV) code that represents the CVSS attack vector value of the vulnerability."
+          },
+          "cvss_v3_attack_complexity": {
+            "type": "varchar( 1 )",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Attack Complexity (AC) code that represents the CVSS attack complexity value of the vulnerability."
+          },
+          "cvss_v3_privileges_required": {
+            "type": "varchar( 1 )",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Privileges Required (PR) code that represents the CVSS privilege required value of the vulnerability."
+          },
+          "cvss_v3_user_interaction": {
+            "type": "varchar( 1 )",
+            "primary_key": false,
+            "nullable": true,
+            "description": "User Interaction (UI) code that represents the CVSS user interaction value of the vulnerability."
+          },
+          "cvss_v3_scope": {
+            "type": "varchar( 1 )",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Scope (S) code that represents the CVSS scope value of the vulnerability."
+          },
+          "cvss_v3_confidentiality_impact": {
+            "type": "varchar( 1 )",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Confidentiality Impact (C) code that represents the CVSS confidentiality impact value of the vulnerability."
+          },
+          "cvss_v3_integrity_impact": {
+            "type": "varchar( 1 )",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Integrity Impact (I) code that represents the CVSS integrity impact value of the vulnerability."
+          },
+          "cvss_v3_availability_impact": {
+            "type": "varchar( 1 )",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Availability Impact (A) code that represents the CVSS availability impact value of the vulnerability."
+          },
+          "cvss_v3_score": {
+            "type": "real",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Value between 0 and 10 representing the CVSS Version 3.0 score of the Vulnerability."
+          },
+          "cvss_v3_impact_score": {
+            "type": "real",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Base score for the impact of a vulnerability that is used to compute the overall CVSS Version 3.0 score."
+          },
+          "cvss_v3_exploit_score": {
+            "type": "real",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Base score for the exploitability of a vulnerability that is used to compute the overall CVSS Version 3.0 score."
+          },
+          "pci_special_notes": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Notes attached to the vulnerability following PCI rules."
+          },
+          "denial_of_service": {
+            "type": "bool",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Signifies whether the vulnerability is classified as a denial-of-service vulnerability."
+          },
+          "exploits": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of distinct exploits/modules that are known to exploit the vulnerability."
+          },
+          "malware_kits": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of distinct malware kits that are known to exploit the vulnerability."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_vulnerability_category": {
+        "type": "dimension",
+        "description": "The human-readable name of the vulnerability category.",
+        "primary_key": null,
+        "fields": {
+          "category_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability category."
+          },
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability.",
+            "foreign_key": "dim_vulnerability"
+          },
+          "category_name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The human-readable name of the vulnerability category."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_vulnerability_exception": {
+        "type": "dimension",
+        "description": "If the scope is 'Instance' and the exception is applied to a vulnerability with a secondary key, the key of the vulnerability the exception applies to. For all other scopes, the value is NULL.",
+        "primary_key": "vulnerability_exception_id",
+        "fields": {
+          "vulnerability_exception_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the vulnerability exception."
+          },
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability.",
+            "foreign_key": "dim_vulnerability"
+          },
+          "scope_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the exception scope.",
+            "foreign_key": "dim_exception_scope"
+          },
+          "reason_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the exception reason.",
+            "foreign_key": "dim_exception_reason"
+          },
+          "additional_comments": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Comments field populated when a state transition, such as rejection or submission, occurs. This is a user-populated field that is optional."
+          },
+          "submitted_date": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date that the exception was last submitted, or resubmitted for approval. If the exception has been rejected or recalled and is resubmitted, only the date of the last state transition is used."
+          },
+          "submitted_by": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The login name of the user that submitted the vulnerability exception for approval."
+          },
+          "review_date": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date when the last review of the exception request was performed. This can either be the date when the exception was last approved, or last rejected. If the exception is approved, rejected, or recalled multiple times, this is the date of the last state transition. If a review is pending, this value may be NULL."
+          },
+          "reviewed_by": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The login name of the user that reviewed the vulnerability exception for approval and either approved or rejected it. If the exception is still waiting for approval, this value is NULL."
+          },
+          "review_comment": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The last comment when the exception was reviewed, and either approved or rejected. If a review has yet to occur, this can be null."
+          },
+          "expiration_date": {
+            "type": "date",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date at which the expiration of the exception occurs. The expiration date is interpreted as midnight on the date specified. The timestamp is converted into the timezone specified within the report configuration."
+          },
+          "status_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the exception status.",
+            "foreign_key": "dim_exception_status"
+          },
+          "site_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "If the scope is 'Site', the id of the site the exception applies to. For all other scopes, the value is NULL.",
+            "foreign_key": "dim_site"
+          },
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "If the scope is 'Asset' or 'Instance' the id of the asset the exception applies to. For all other scopes, the value is NULL.",
+            "foreign_key": "dim_asset"
+          },
+          "group_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "If the scope is 'Asset Group', the id of the group the exception applies to. For all other scopes, the value is NULL."
+          },
+          "port": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "If the scope is 'Instance' and the exception is applying to a service, the port of the service that exception is applied to. For all other scopes, the value is NULL."
+          },
+          "key": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "If the scope is 'Instance' and the exception is applied to a vulnerability with a secondary key, the key of the vulnerability the exception applies to. For all other scopes, the value is NULL."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_vulnerability_exploit": {
+        "type": "dimension",
+        "description": "The identifier of the exploit within the source that published the exploit. This can be an internal identifier key for the exploit within the source.",
+        "primary_key": "exploit_id",
+        "fields": {
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability the exploit relates to.",
+            "foreign_key": "dim_vulnerability"
+          },
+          "exploit_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the exploit module."
+          },
+          "title": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The short name or title of the exploit which describes the name, purpose, or target of the exploit."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The description of the exploit that provides more detailed information on the purpose or target of the exploit."
+          },
+          "skill_level": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The skill level required to perform the exploit, one of the values: 'Expert', 'Novice', or 'Intermediate'."
+          },
+          "source": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The source which defined and published the exploit, one of the values: 'Exploit Database' or 'Metasploit Module'."
+          },
+          "source_key": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the exploit within the source that published the exploit. This can be an internal identifier key for the exploit within the source."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_vulnerability_malware_kit": {
+        "type": "dimension",
+        "description": "The popularity of the malware kit, which identifies how common or accessible it is. Popularity can have the following values: 'Uncommon', 'Occasional', 'Rare', 'Common', 'Favored', 'Popular', or 'Unknown'.",
+        "primary_key": "malware_kit_id",
+        "fields": {
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability with a malware kit",
+            "foreign_key": "dim_vulnerability"
+          },
+          "malware_kit_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the malware kit."
+          },
+          "name": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of the malware kit."
+          },
+          "popularity": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The popularity of the malware kit, which identifies how common or accessible it is. Popularity can have the following values: 'Uncommon', 'Occasional', 'Rare', 'Common', 'Favored', 'Popular', or 'Unknown'."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_vulnerability_reference": {
+        "type": "dimension",
+        "description": "The reference that keys or links into the source repository. If the source is 'URL', the reference is a URL. For other data sources such as CVE, BID, or SECUNIA, the reference is typically a key that indexes into those repositories.",
+        "primary_key": null,
+        "fields": {
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability.",
+            "foreign_key": "dim_vulnerability"
+          },
+          "source": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The name of a source of vulnerability information or metadata. The source is provided in all upper-case characters (for consistency with the user interface)."
+          },
+          "reference": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The reference that keys or links into the source repository. If the source is 'URL', the reference is a URL. For other data sources such as CVE, BID, or SECUNIA, the reference is typically a key that indexes into those repositories."
+          }
+        },
+        "relationships": {}
+      },
+      "dim_vulnerability_solution": {
+        "type": "dimension",
+        "description": "The unique identifier of the solution.",
+        "primary_key": null,
+        "fields": {
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability.",
+            "foreign_key": "dim_vulnerability"
+          },
+          "solution_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the solution.",
+            "foreign_key": "dim_solution"
+          }
+        },
+        "relationships": {}
+      },
+      "dim_vulnerability_status": {
+        "type": "dimension",
+        "description": "The description of the vulnerability status (e.g., 'Vulnerable', 'Vulnerable Exploited', 'Vulnerable Version', 'Potential').",
+        "primary_key": "status_id",
+        "fields": {
+          "status_id": {
+            "type": "text",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the vulnerability status."
+          },
+          "description": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The description of the vulnerability status (e.g., 'Vulnerable', 'Vulnerable Exploited', 'Vulnerable Version', 'Potential')."
+          }
+        },
+        "relationships": {}
+      },
+      "fact_all": {
+        "type": "fact",
+        "description": "The overall compliance level ('Pass' or 'Fail') according to PCI standards. The status is only 'Pass' if all assets individually have a status of 'Pass' (e.g. in fact_asset)",
+        "primary_key": null,
+        "fields": {
+          "assets": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of assets."
+          },
+          "vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of vulnerabilities on each asset. This value is equal to the sum of the critical_vulnerabilities, severe_vulnerabilities, and moderate_vulnerabilities columns."
+          },
+          "critical_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of critical vulnerabilities on each asset."
+          },
+          "severe_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of severe vulnerabilities on each asset."
+          },
+          "moderate_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of moderate vulnerabilities on each asset."
+          },
+          "malware_kits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of malware kits on each asset."
+          },
+          "exploits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of exploits on each asset."
+          },
+          "vulnerabilities_with_malware_kit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of vulnerabilities with malware on each asset."
+          },
+          "vulnerabilities_with_exploit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of vulnerabilities with exploits on each asset."
+          },
+          "vulnerability_instances": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the vulnerabilities instances on each asset."
+          },
+          "riskscore": {
+            "type": "float8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The aggregate risk score."
+          },
+          "pci_status": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The overall compliance level ('Pass' or 'Fail') according to PCI standards. The status is only 'Pass' if all assets individually have a status of 'Pass' (e.g. in fact_asset)"
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset": {
+        "type": "fact",
+        "description": "The identifier of the aggregated credential status for the asset.",
+        "primary_key": "asset_id",
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "last_scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the most recent scan performed on the asset.",
+            "foreign_key": "dim_scan"
+          },
+          "scan_started": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the most recent scan started for this asset."
+          },
+          "scan_finished": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the most recent scan completed for this asset."
+          },
+          "vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of vulnerability findings on the asset. This value is equal to the sum of critical_vulnerabilities, severe_vulnerabilities, and moderate_vulnerabilities columns."
+          },
+          "critical_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of vulnerability findings for vulnerabilities with a critical severity."
+          },
+          "severe_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of vulnerability findings for vulnerabilities with a severe severity."
+          },
+          "moderate_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of vulnerability findings for vulnerabilities with a moderate severity."
+          },
+          "malware_kits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of distinct malware kits that can exploit any vulnerabilities on the asset."
+          },
+          "exploits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of distinct exploit modules that can exploit any vulnerabilities on the asset."
+          },
+          "vulnerabilities_with_malware_kit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of vulnerabilities on the asset that have at least one malware kit."
+          },
+          "vulnerabilities_with_exploit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of vulnerabilities on the asset that have at least one exploit module."
+          },
+          "vulnerability_instances": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of instances of all vulnerabilities."
+          },
+          "riskscore": {
+            "type": "float8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The computed risk score for the asset."
+          },
+          "pci_status": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The compliance level, either 'Pass' or 'Fail', of the asset according to PCI standards."
+          },
+          "aggregated_credential_status_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the aggregated credential status for the asset.",
+            "foreign_key": "dim_aggregated_credential_status"
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_discovery": {
+        "type": "fact",
+        "description": "The date and time the asset was last discovered.",
+        "primary_key": "asset_id",
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "first_discovered": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date and time the asset was first discovered."
+          },
+          "last_discovered": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date and time the asset was last discovered."
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_group": {
+        "type": "fact",
+        "description": "The overall compliance level ('Pass' or 'Fail') of the asset group according to PCI standards. The status is only 'Pass' if all assets in the group individually have a status of 'Pass' (e.g. in fact_asset)",
+        "primary_key": "asset_group_id",
+        "fields": {
+          "asset_group_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the asset group.",
+            "foreign_key": "dim_asset_group"
+          },
+          "assets": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of assets that are in the scope of associated to the group. If the group has no assets in the current scope or membership, this value can be zero."
+          },
+          "vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of vulnerabilities on each asset. This value is equal to the sum of the critical_vulnerabilities, severe_vulnerabilities, and moderate_vulnerabilities columns."
+          },
+          "critical_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of critical vulnerabilities on each asset."
+          },
+          "severe_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of severe vulnerabilities on each asset."
+          },
+          "moderate_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of moderate vulnerabilities on each asset."
+          },
+          "malware_kits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of malware kits on each asset."
+          },
+          "exploits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of exploits on each asset."
+          },
+          "vulnerabilities_with_malware_kit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of vulnerabilities with malware on each asset."
+          },
+          "vulnerabilities_with_exploit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of vulnerabilities with exploits on each asset."
+          },
+          "vulnerability_instances": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the vulnerabilities instances on each asset."
+          },
+          "riskscore": {
+            "type": "float8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The aggregate risk score."
+          },
+          "pci_status": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The overall compliance level ('Pass' or 'Fail') of the asset group according to PCI standards. The status is only 'Pass' if all assets in the group individually have a status of 'Pass' (e.g. in fact_asset)"
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_policy": {
+        "type": "fact",
+        "description": "The ratio of passing results for the rules to the total number of scorable rules for this policy.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "last_scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the most recent scan performed on the asset.",
+            "foreign_key": "dim_scan"
+          },
+          "policy_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the policy.",
+            "foreign_key": "dim_policy"
+          },
+          "scope": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The scope of the policy (e.g., 'asset', 'asset-group', 'global', 'site')."
+          },
+          "date_tested": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the policy was tested against the asset."
+          },
+          "compliant_rules": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of rules for which the asset passed in the most recent scan for this policy."
+          },
+          "noncompliant_rules": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of rules for which the asset failed in the most recent scan for this policy"
+          },
+          "not_applicable_rules": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of rules that were not applicable to the asset in the most recent scan for this policy."
+          },
+          "rule_compliance": {
+            "type": "float8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The ratio of passing results for the rules to the total number of scorable rules for this policy."
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_policy_rule": {
+        "type": "fact",
+        "description": "The identifier of a policy override effectively overriding a rule test result on the asset. If there are more than one such overrides, the last submitted one will take precedent over the rest.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "policy_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the policy.",
+            "foreign_key": "dim_policy"
+          },
+          "rule_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the policy rule.",
+            "foreign_key": "dim_policy_rule"
+          },
+          "scope": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The scope of the policy rule (e.g., 'asset', 'asset-group', 'global', 'site')."
+          },
+          "date_tested": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the policy rule was tested against the asset."
+          },
+          "status_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the policy result status."
+          },
+          "compliance": {
+            "type": "boolean",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Whether the asset is compliant with the policy rule (true for pass, false for fail)."
+          },
+          "proof": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The proof output from the policy rule test, demonstrating the result."
+          },
+          "override_ids": {
+            "type": "_int8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The array identifiers of policy overrides potentially overriding a rule test result on an asset."
+          },
+          "override_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of a policy override effectively overriding a rule test result on the asset. If there are more than one such overrides, the last submitted one will take precedent over the rest.",
+            "foreign_key": "dim_policy_override"
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_policy_rule_check": {
+        "type": "fact",
+        "description": "The unique identifier of the rule check result.",
+        "primary_key": "result_id",
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "policy_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the policy.",
+            "foreign_key": "dim_policy"
+          },
+          "rule_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the policy rule.",
+            "foreign_key": "dim_policy_rule"
+          },
+          "scope": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The scope of the policy rule check (e.g., 'asset', 'asset-group', 'global', 'site')."
+          },
+          "date_tested": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the policy rule check was tested against the asset."
+          },
+          "status_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the policy result status for the check."
+          },
+          "compliance": {
+            "type": "boolean",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Whether the asset is compliant with the policy rule check (true for pass, false for fail)."
+          },
+          "proof": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The proof gathered during the evaluation of the rule check on the asset."
+          },
+          "override_ids": {
+            "type": "_int8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The array identifiers of policy overrides potentially overriding a rule test result on an asset."
+          },
+          "override_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of a policy override effectively overriding a rule test result on the asset. If there are more than one such overrides, the last submitted one will take precedent over the rest.",
+            "foreign_key": "dim_policy_override"
+          },
+          "result_id": {
+            "type": "bigint",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the rule check result."
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_scan": {
+        "type": "fact",
+        "description": "The identifier of the aggregated credential status for the asset during this scan.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the scan.",
+            "foreign_key": "dim_scan"
+          },
+          "scan_started": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the scan started for this asset."
+          },
+          "scan_finished": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the scan completed for this asset."
+          },
+          "vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of vulnerabilities discovered on the asset during the scan."
+          },
+          "critical_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of critical vulnerabilities found on the asset during the scan."
+          },
+          "severe_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of severe vulnerabilities found on the asset during the scan."
+          },
+          "moderate_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of moderate vulnerabilities found on the asset during the scan."
+          },
+          "malware_kits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of malware kits associated with vulnerabilities on the asset."
+          },
+          "exploits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of exploits associated with vulnerabilities on the asset."
+          },
+          "vulnerabilities_with_malware_kit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of vulnerabilities on the asset that have associated malware kits."
+          },
+          "vulnerabilities_with_exploit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of vulnerabilities on the asset that have known exploits."
+          },
+          "vulnerability_instances": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of vulnerability instances found on the asset during the scan."
+          },
+          "riskscore": {
+            "type": "float8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The computed risk score for the asset based on this scan."
+          },
+          "pci_status": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The overall PCI compliance status of the asset for this scan."
+          },
+          "aggregated_credential_status_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The identifier of the aggregated credential status for the asset during this scan.",
+            "foreign_key": "dim_aggregated_credential_status"
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_scan_operating_system": {
+        "type": "fact",
+        "description": "The certainty of the OS fingerprint, expressed as a decimal confidence between 0 (low) and 1.0 (high).",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the scan.",
+            "foreign_key": "dim_scan"
+          },
+          "date": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date and time the operating system was detected during the scan."
+          },
+          "operating_system_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the operating system detected.",
+            "foreign_key": "dim_operating_system"
+          },
+          "fingerprint_source_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the fingerprint source used to detect the operating system.",
+            "foreign_key": "dim_fingerprint_source"
+          },
+          "certainty": {
+            "type": "real",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The certainty of the OS fingerprint, expressed as a decimal confidence between 0 (low) and 1.0 (high)."
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_scan_policy": {
+        "type": "fact",
+        "description": "The overall compliance ratio for the policy on this asset, expressed as a decimal between 0 (non-compliant) and 1.0 (fully compliant).",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the scan.",
+            "foreign_key": "dim_scan"
+          },
+          "policy_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the policy tested.",
+            "foreign_key": "dim_policy"
+          },
+          "scope": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The scope of the policy evaluation (e.g., 'Asset', 'Site')."
+          },
+          "date_tested": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date and time the policy was tested on the asset during this scan."
+          },
+          "compliant_rules": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of policy rules that passed (were compliant) on the asset."
+          },
+          "noncompliant_rules": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of policy rules that failed (were non-compliant) on the asset."
+          },
+          "not_applicable_rules": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of policy rules that were not applicable to the asset."
+          },
+          "rule_compliance": {
+            "type": "real",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The overall compliance ratio for the policy on this asset, expressed as a decimal between 0 (non-compliant) and 1.0 (fully compliant)."
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_scan_service": {
+        "type": "fact",
+        "description": "The unique identifier of the credential status for this service.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the scan.",
+            "foreign_key": "dim_scan"
+          },
+          "date": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date and time the service was detected during the scan."
+          },
+          "service_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the service detected.",
+            "foreign_key": "dim_service"
+          },
+          "protocol_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the protocol used by the service.",
+            "foreign_key": "dim_protocol"
+          },
+          "port": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The port on which the service was detected."
+          },
+          "service_fingerprint_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the service fingerprint detected.",
+            "foreign_key": "dim_service_fingerprint"
+          },
+          "credential_status_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the credential status for this service.",
+            "foreign_key": "dim_credential_status"
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_scan_software": {
+        "type": "fact",
+        "description": "The unique identifier of the fingerprint source used to detect the software.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the scan.",
+            "foreign_key": "dim_scan"
+          },
+          "date": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date and time the software was detected during the scan."
+          },
+          "software_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the software detected.",
+            "foreign_key": "dim_software"
+          },
+          "fingerprint_source_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the fingerprint source used to detect the software.",
+            "foreign_key": "dim_fingerprint_source"
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_scan_vulnerability_finding": {
+        "type": "fact",
+        "description": "The number of instances of this vulnerability found on the asset during the scan.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the scan.",
+            "foreign_key": "dim_scan"
+          },
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability found.",
+            "foreign_key": "dim_vulnerability"
+          },
+          "date": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date and time the vulnerability was tested during this scan."
+          },
+          "vulnerability_instances": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of instances of this vulnerability found on the asset during the scan."
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_scan_vulnerability_instance": {
+        "type": "fact",
+        "description": "The unique identifier of the protocol associated with the instance.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the scan.",
+            "foreign_key": "dim_scan"
+          },
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability.",
+            "foreign_key": "dim_vulnerability"
+          },
+          "date": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date and time the vulnerability instance was tested during this scan."
+          },
+          "status_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability status.",
+            "foreign_key": "dim_vulnerability_status"
+          },
+          "proof": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The proof output from the vulnerability check, demonstrating the vulnerability exists."
+          },
+          "key": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "An optional key providing additional context for the vulnerability instance (e.g., registry key, file path, URL)."
+          },
+          "service_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the service associated with the vulnerability instance.",
+            "foreign_key": "dim_service"
+          },
+          "port": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The port on which the vulnerability instance was found."
+          },
+          "protocol_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the protocol associated with the instance.",
+            "foreign_key": "dim_protocol"
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_vulnerability_age": {
+        "type": "fact",
+        "description": "The date and time the vulnerability was reintroduced on the asset after previously being remediated.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability.",
+            "foreign_key": "dim_vulnerability"
+          },
+          "age": {
+            "type": "interval",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The age of the vulnerability on the asset as a time interval."
+          },
+          "age_in_days": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of days the vulnerability has been present on the asset."
+          },
+          "first_discovered": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date and time the vulnerability was first discovered on the asset."
+          },
+          "most_recently_discovered": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date and time the vulnerability was most recently discovered on the asset."
+          },
+          "reintroduced_date": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date and time the vulnerability was reintroduced on the asset after previously being remediated."
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_vulnerability_finding": {
+        "type": "fact",
+        "description": "The number of instances of this finding on the asset.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the most recent scan in which the vulnerability was found.",
+            "foreign_key": "dim_scan"
+          },
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability.",
+            "foreign_key": "dim_vulnerability"
+          },
+          "date": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the vulnerability was first found on the asset. This is the earliest date any instance on the asset was found."
+          },
+          "vulnerability_instances": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of instances of this finding on the asset."
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_vulnerability_instance": {
+        "type": "fact",
+        "description": "The unique identifier of the protocol.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the most recent scan in which the vulnerability was found.",
+            "foreign_key": "dim_scan"
+          },
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability.",
+            "foreign_key": "dim_vulnerability"
+          },
+          "vulnerability_exception_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the primary vulnerability exception that applies to this instance, if any."
+          },
+          "vulnerability_exception_ids": {
+            "type": "_int8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "An array of all vulnerability exception identifiers that apply to this instance."
+          },
+          "date": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The time at which the vulnerability was first found on the asset. This is the earliest date any instance on the asset was found."
+          },
+          "status_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability status.",
+            "foreign_key": "dim_vulnerability_status"
+          },
+          "proof": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Free-form text that describes the proof which explains why the vulnerability is present on the asset. The proof is represented using HTML markup that can be \"flattened\" using the htmlToText() function."
+          },
+          "key": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "Optional secondary identifier for a vulnerability result that can distinguish the result from other vulnerability instances of the same type on the system, but found in different locations (e.g. URLs)."
+          },
+          "service_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the service associated with the vulnerability instance, if applicable.",
+            "foreign_key": "dim_service"
+          },
+          "port": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The port on which the service was running if the vulnerability was found through a network service. If the vulnerability was not found in the network service, the value is NULL. The data within this column will only contain valid port numbers (0 - 65535)."
+          },
+          "protocol_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the protocol.",
+            "foreign_key": "dim_protocol"
+          }
+        },
+        "relationships": {}
+      },
+      "fact_asset_vulnerability_instance_excluded": {
+        "type": "fact",
+        "description": "The unique identifier of the protocol associated with the instance.",
+        "primary_key": null,
+        "fields": {
+          "asset_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the asset.",
+            "foreign_key": "dim_asset"
+          },
+          "scan_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the scan.",
+            "foreign_key": "dim_scan"
+          },
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability.",
+            "foreign_key": "dim_vulnerability"
+          },
+          "vulnerability_exception_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the primary vulnerability exception that excludes this instance.",
+            "foreign_key": "dim_vulnerability_exception"
+          },
+          "vulnerability_exception_ids": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "A comma-delimited list of all vulnerability exception identifiers that apply to this instance."
+          },
+          "date": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date and time the vulnerability instance was tested during this scan."
+          },
+          "status_id": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the vulnerability status.",
+            "foreign_key": "dim_vulnerability_status"
+          },
+          "proof": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The proof output from the vulnerability check, demonstrating the vulnerability exists."
+          },
+          "key": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "An optional key providing additional context for the vulnerability instance (e.g., registry key, file path, URL)."
+          },
+          "service_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the service associated with the vulnerability instance.",
+            "foreign_key": "dim_service"
+          },
+          "port": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The port on which the vulnerability instance was found."
+          },
+          "protocol_id": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the protocol associated with the instance.",
+            "foreign_key": "dim_protocol"
+          }
+        },
+        "relationships": {}
+      },
+      "fact_policy": {
+        "type": "fact",
+        "description": "The ratio of assets passing all scorable rules in the policy to the total number of assets tested with the policy.",
+        "primary_key": "policy_id",
+        "fields": {
+          "policy_id": {
+            "type": "bigint",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the policy.",
+            "foreign_key": "dim_policy"
+          },
+          "scope": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The scope of the policy (e.g., 'asset', 'asset-group', 'global', 'site')."
+          },
+          "rule_compliance": {
+            "type": "float8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The ratio of rules passing across all tested assets to the total number of scorable rules across all tested assets for this policy."
+          },
+          "total_assets": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of tested assets with applicable results. An asset has applicable results if at least one rule has a pass or fail status. An asset with all rule status."
+          },
+          "compliant_assets": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of assets passing all scorable rules in the policy."
+          },
+          "noncompliant_assets": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of assets failing at least one scorable rule in the policy."
+          },
+          "not_applicable_assets": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of assets with no applicable rules in the policy."
+          },
+          "asset_compliance": {
+            "type": "float8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The ratio of assets passing all scorable rules in the policy to the total number of assets tested with the policy."
+          }
+        },
+        "relationships": {}
+      },
+      "fact_policy_rule": {
+        "type": "fact",
+        "description": "The ratio of the assets passing the rule to the assets tested.",
+        "primary_key": null,
+        "fields": {
+          "policy_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the policy.",
+            "foreign_key": "dim_policy"
+          },
+          "rule_id": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The unique identifier of the policy rule.",
+            "foreign_key": "dim_policy_rule"
+          },
+          "scope": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The scope of the policy rule (e.g., 'asset', 'asset-group', 'global', 'site')."
+          },
+          "compliant_assets": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of assets passing the rule."
+          },
+          "noncompliant_assets": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of assets failing the rule."
+          },
+          "not_applicable_assets": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The number of assets not applicable to the rule. Assets not applicable to this rule are only counted if they are applicable to at least one rule in the policy."
+          },
+          "asset_compliance": {
+            "type": "float8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The ratio of the assets passing the rule to the assets tested."
+          }
+        },
+        "relationships": {}
+      },
+      "fact_remediation": {
+        "type": "fact",
+        "description": "The aggregate risk score for all vulnerabilities remediated by this solution.",
+        "primary_key": "solution_id",
+        "fields": {
+          "solution_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the remediation solution.",
+            "foreign_key": "dim_solution"
+          },
+          "assets": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of assets affected by vulnerabilities that this solution remediates."
+          },
+          "vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total count of vulnerabilities that this solution remediates."
+          },
+          "critical_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The count of critical vulnerabilities remediated by this solution."
+          },
+          "severe_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The count of severe vulnerabilities remediated by this solution."
+          },
+          "moderate_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The count of moderate vulnerabilities remediated by this solution."
+          },
+          "malware_kits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The count of malware kits associated with vulnerabilities remediated by this solution."
+          },
+          "exploits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The count of exploits associated with vulnerabilities remediated by this solution."
+          },
+          "vulnerabilities_with_malware_kit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The count of vulnerabilities with malware kits that are remediated by this solution."
+          },
+          "vulnerabilities_with_exploit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The count of vulnerabilities with exploits that are remediated by this solution."
+          },
+          "vulnerability_instances": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total count of vulnerability instances remediated by this solution."
+          },
+          "riskscore": {
+            "type": "float8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The aggregate risk score for all vulnerabilities remediated by this solution."
+          }
+        },
+        "relationships": {}
+      },
+      "fact_scan": {
+        "type": "fact",
+        "description": "The overall compliance level ('Pass' or 'Fail') according to PCI standards. The status is only 'Pass' if all assets individually have a status of 'Pass' (e.g. in fact_asset)",
+        "primary_key": "scan_id",
+        "fields": {
+          "scan_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the scan.",
+            "foreign_key": "dim_scan"
+          },
+          "assets": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of assets in the scan."
+          },
+          "vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of vulnerabilities on each asset. This value is equal to the sum of the critical_vulnerabilities, severe_vulnerabilities, and moderate_vulnerabilities columns."
+          },
+          "critical_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of critical vulnerabilities on each asset."
+          },
+          "severe_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of severe vulnerabilities on each asset."
+          },
+          "moderate_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of moderate vulnerabilities on each asset."
+          },
+          "malware_kits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of malware kits on each asset."
+          },
+          "exploits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of exploits on each asset."
+          },
+          "vulnerabilities_with_malware_kit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of vulnerabilities with malware on each asset."
+          },
+          "vulnerabilities_with_exploit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of vulnerabilities with exploits on each asset."
+          },
+          "vulnerability_instances": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the vulnerabilities instances on each asset."
+          },
+          "riskscore": {
+            "type": "float8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The aggregate risk score for the scan."
+          },
+          "pci_status": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The overall compliance level ('Pass' or 'Fail') according to PCI standards. The status is only 'Pass' if all assets individually have a status of 'Pass' (e.g. in fact_asset)"
+          }
+        },
+        "relationships": {}
+      },
+      "fact_site": {
+        "type": "fact",
+        "description": "The overall compliance level ('Pass' or 'Fail') according to PCI standards. The status is only 'Pass' if all assets individually have a status of 'Pass' (e.g. in fact_asset)",
+        "primary_key": "site_id",
+        "fields": {
+          "site_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the site.",
+            "foreign_key": "dim_site"
+          },
+          "assets": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of assets in the site."
+          },
+          "vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of vulnerabilities on each asset. This value is equal to the sum of the critical_vulnerabilities, severe_vulnerabilities, and moderate_vulnerabilities columns."
+          },
+          "critical_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of critical vulnerabilities on each asset."
+          },
+          "severe_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of severe vulnerabilities on each asset."
+          },
+          "moderate_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of moderate vulnerabilities on each asset."
+          },
+          "malware_kits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of malware kits on each asset."
+          },
+          "exploits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of exploits on each asset."
+          },
+          "vulnerabilities_with_malware_kit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of vulnerabilities with malware on each asset."
+          },
+          "vulnerabilities_with_exploit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of vulnerabilities with exploits on each asset."
+          },
+          "vulnerability_instances": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the vulnerabilities instances on each asset."
+          },
+          "riskscore": {
+            "type": "float8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The aggregate risk score for the scan."
+          },
+          "pci_status": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The overall compliance level ('Pass' or 'Fail') according to PCI standards. The status is only 'Pass' if all assets individually have a status of 'Pass' (e.g. in fact_asset)"
+          }
+        },
+        "relationships": {}
+      },
+      "fact_tag": {
+        "type": "fact",
+        "description": "The overall compliance level ('Pass' or 'Fail') according to PCI standards for assets associated with this tag.",
+        "primary_key": "tag_id",
+        "fields": {
+          "tag_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the tag.",
+            "foreign_key": "dim_tag"
+          },
+          "assets": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of assets associated with this tag."
+          },
+          "vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of vulnerabilities on each asset associated with this tag."
+          },
+          "critical_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of critical vulnerabilities on each asset associated with this tag."
+          },
+          "severe_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of severe vulnerabilities on each asset associated with this tag."
+          },
+          "moderate_vulnerabilities": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of moderate vulnerabilities on each asset associated with this tag."
+          },
+          "malware_kits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of malware kits on each asset associated with this tag."
+          },
+          "exploits": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of exploits on each asset associated with this tag."
+          },
+          "vulnerabilities_with_malware_kit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of vulnerabilities with malware on each asset associated with this tag."
+          },
+          "vulnerabilities_with_exploit": {
+            "type": "integer",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the count of vulnerabilities with exploits on each asset associated with this tag."
+          },
+          "vulnerability_instances": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The sum of the vulnerability instances on each asset associated with this tag."
+          },
+          "riskscore": {
+            "type": "float8",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The aggregate risk score for all assets associated with this tag."
+          },
+          "pci_status": {
+            "type": "text",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The overall compliance level ('Pass' or 'Fail') according to PCI standards for assets associated with this tag."
+          }
+        },
+        "relationships": {}
+      },
+      "fact_vulnerability": {
+        "type": "fact",
+        "description": "The data at which the vulnerability was most recently discovered on any asset that is currently vulnerable to the vulnerability.",
+        "primary_key": "vulnerability_id",
+        "fields": {
+          "vulnerability_id": {
+            "type": "integer",
+            "primary_key": true,
+            "nullable": false,
+            "description": "The unique identifier of the vulnerability.",
+            "foreign_key": "dim_vulnerability"
+          },
+          "affected_assets": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of assets vulnerable to this vulnerability."
+          },
+          "affected_sites": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of sites with at least one asset vulnerable to this vulnerability."
+          },
+          "vulnerability_instances": {
+            "type": "bigint",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The total number of instances across all assets of this vulnerability."
+          },
+          "first_discovered": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The date at which this vulnerability was first discovered on any asset that is still presently vulnerable to the vulnerability."
+          },
+          "most_recently_discovered": {
+            "type": "timestamp",
+            "primary_key": false,
+            "nullable": true,
+            "description": "The data at which the vulnerability was most recently discovered on any asset that is currently vulnerable to the vulnerability."
+          }
+        },
+        "relationships": {}
+      }
+    }
+  }
+}
