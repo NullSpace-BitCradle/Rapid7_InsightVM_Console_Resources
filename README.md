@@ -65,6 +65,16 @@ Step-by-step guide for extracting schema from local console
 - **Troubleshooting guide** for common issues
 - **Security considerations** and rollback instructions
 
+### [📄 Machine-Readable Schema Files](./SCHEMA_FILES_README.md)
+
+JSON schema files for automation, query building, and MCP development
+
+- **Complete schema** (`rapid7_insightvm_complete_schema.json`) - 89 tables with full field definitions
+- **Compact schema** (`rapid7_insightvm_schema_compact.json`) - Key tables optimized for query building
+- **MCP integration** templates and function definitions
+- **Query building helpers** and common join patterns
+- **Code generation** support for ORMs and APIs
+
 ---
 
 ## ⚠️ Important Disclaimers
@@ -96,10 +106,11 @@ Step-by-step guide for extracting schema from local console
 
 ### For Developers and Integrators
 
-1. **Review** the [Complete Table Reference](./COMPLETE_TABLE_REFERENCE.md) for API understanding
-2. **Study** the [Entity Relationship Diagram](./RAPID7_INSIGHTVM_ERD.md) for data modeling
-3. **Use** the [Quick Table Lookup](./QUICK_TABLE_LOOKUP.md) for common query patterns
-4. **Extract** schema using the [Schema Extraction Guide](./RAPID7_SCHEMA_EXTRACTION_GUIDE.md)
+1. **Start with** [Machine-Readable Schema Files](./SCHEMA_FILES_README.md) for automation and code generation
+2. **Review** the [Complete Table Reference](./COMPLETE_TABLE_REFERENCE.md) for API understanding
+3. **Study** the [Entity Relationship Diagram](./RAPID7_INSIGHTVM_ERD.md) for data modeling
+4. **Use** the [Quick Table Lookup](./QUICK_TABLE_LOOKUP.md) for common query patterns
+5. **Extract** schema using the [Schema Extraction Guide](./RAPID7_SCHEMA_EXTRACTION_GUIDE.md)
 
 ---
 
@@ -197,6 +208,13 @@ ORDER BY fap.rule_compliance ASC;
 - **InsightVM 6.x** and later
 - **PostgreSQL 9.x** and later
 - **SQL Query Export** interface
+
+### Schema Files
+
+- **Complete Schema** (`rapid7_insightvm_complete_schema.json`) - Full 89-table reference
+- **Compact Schema** (`rapid7_insightvm_schema_compact.json`) - Optimized for query building
+- **Machine-readable format** for automation and integration
+- **MCP development** templates and function definitions
 
 ### Performance Considerations
 
