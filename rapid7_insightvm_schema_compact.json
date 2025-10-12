@@ -1,0 +1,140 @@
+{
+  "schema": {
+    "name": "rapid7_insightvm_sql_export",
+    "version": "1.0.0",
+    "description": "Rapid7 InsightVM SQL Query Export Schema - Machine-readable reference for automation",
+    "disclaimer": "This schema represents the most complete reference available but is not officially verified by Rapid7",
+    "statistics": {
+      "total_tables": 89,
+      "dimension_tables": 64,
+      "fact_tables": 24,
+      "functions": 1
+    },
+    "table_types": {
+      "dimension": "Master data, lookups, and reference tables",
+      "fact": "Metrics, measurements, and aggregations",
+      "function": "Database functions for analysis"
+    },
+    "common_patterns": {
+      "primary_keys": {
+        "asset_id": "bigint - Asset identifier",
+        "vulnerability_id": "integer - Vulnerability identifier", 
+        "scan_id": "bigint - Scan identifier",
+        "site_id": "integer - Site identifier",
+        "policy_id": "integer - Policy identifier",
+        "solution_id": "integer - Solution identifier"
+      },
+      "foreign_key_patterns": {
+        "asset_tables": "Most tables reference dim_asset via asset_id",
+        "vulnerability_tables": "Vulnerability-related tables reference dim_vulnerability",
+        "scan_tables": "Scan-related tables reference dim_scan",
+        "site_tables": "Site-related tables reference dim_site"
+      }
+    },
+    "tables": {
+      "dim_asset": {
+        "type": "dimension",
+        "description": "Asset master data - core asset information",
+        "primary_key": "asset_id",
+        "key_fields": ["asset_id", "ip_address", "host_name", "mac_address"],
+        "relationships": {
+          "one_to_many": [
+            "dim_asset_container", "dim_asset_file", "dim_asset_group_asset",
+            "dim_asset_host_name", "dim_asset_ip_address", "dim_asset_mac_address",
+            "dim_asset_operating_system", "dim_asset_scan", "dim_asset_service",
+            "dim_asset_software", "dim_asset_unique_id", "dim_asset_user_account",
+            "dim_asset_vulnerability_best_solution", "dim_asset_vulnerability_solution",
+            "fact_asset", "fact_asset_discovery", "fact_asset_group",
+            "fact_asset_policy", "fact_asset_policy_rule", "fact_asset_policy_rule_check",
+            "fact_asset_scan", "fact_asset_vulnerability_age",
+            "fact_asset_vulnerability_finding", "fact_asset_vulnerability_instance",
+            "fact_asset_vulnerability_instance_excluded"
+          ],
+          "many_to_many": ["dim_site_asset", "dim_tag_asset"]
+        },
+        "sample_queries": [
+          "SELECT * FROM dim_asset WHERE ip_address IS NOT NULL",
+          "SELECT da.*, fa.vulnerabilities FROM dim_asset da JOIN fact_asset fa ON da.asset_id = fa.asset_id"
+        ]
+      },
+      "dim_vulnerability": {
+        "type": "dimension", 
+        "description": "Vulnerability definitions and metadata",
+        "primary_key": "vulnerability_id",
+        "key_fields": ["vulnerability_id", "title", "severity", "cvss_score"],
+        "relationships": {
+          "one_to_many": [
+            "dim_asset_vulnerability_best_solution", "dim_asset_vulnerability_solution",
+            "dim_vulnerability_exception", "dim_vulnerability_exploit",
+            "dim_vulnerability_malware_kit", "dim_vulnerability_reference",
+            "dim_vulnerability_solution", "fact_asset_vulnerability_age",
+            "fact_asset_vulnerability_finding", "fact_asset_vulnerability_instance",
+            "fact_asset_vulnerability_instance_excluded", "fact_vulnerability"
+          ]
+        },
+        "sample_queries": [
+          "SELECT * FROM dim_vulnerability WHERE severity = 'Critical'",
+          "SELECT dv.*, ds.summary FROM dim_vulnerability dv JOIN dim_vulnerability_solution dvs ON dv.vulnerability_id = dvs.vulnerability_id JOIN dim_solution ds ON dvs.solution_id = ds.solution_id"
+        ]
+      },
+      "fact_asset": {
+        "type": "fact",
+        "description": "Asset vulnerability summary metrics",
+        "primary_key": "asset_id", 
+        "key_fields": ["asset_id", "vulnerabilities", "critical_vulnerabilities", "riskscore"],
+        "relationships": {
+          "many_to_one": ["dim_asset"]
+        },
+        "sample_queries": [
+          "SELECT * FROM fact_asset WHERE vulnerabilities > 0 ORDER BY riskscore DESC",
+          "SELECT da.ip_address, fa.vulnerabilities, fa.riskscore FROM fact_asset fa JOIN dim_asset da ON fa.asset_id = da.asset_id"
+        ]
+      },
+      "fact_asset_vulnerability_instance": {
+        "type": "fact",
+        "description": "Individual vulnerability instances per asset",
+        "primary_key": "asset_id, vulnerability_id, date",
+        "key_fields": ["asset_id", "vulnerability_id", "date", "status_id", "proof", "port"],
+        "relationships": {
+          "many_to_one": ["dim_asset", "dim_vulnerability"]
+        },
+        "sample_queries": [
+          "SELECT * FROM fact_asset_vulnerability_instance WHERE status_id = 'vulnerable'",
+          "SELECT favi.*, da.ip_address, dv.title FROM fact_asset_vulnerability_instance favi JOIN dim_asset da ON favi.asset_id = da.asset_id JOIN dim_vulnerability dv ON favi.vulnerability_id = dv.vulnerability_id"
+        ]
+      }
+    },
+    "query_building_helpers": {
+      "common_joins": {
+        "asset_vulnerability": "dim_asset da JOIN fact_asset_vulnerability_instance favi ON da.asset_id = favi.asset_id JOIN dim_vulnerability dv ON favi.vulnerability_id = dv.vulnerability_id",
+        "asset_scan": "dim_asset da JOIN fact_asset_scan fas ON da.asset_id = fas.asset_id JOIN dim_scan ds ON fas.scan_id = ds.scan_id",
+        "asset_site": "dim_asset da JOIN dim_site_asset dsa ON da.asset_id = dsa.asset_id JOIN dim_site ds ON dsa.site_id = ds.site_id"
+      },
+      "common_filters": {
+        "active_assets": "da.ip_address IS NOT NULL",
+        "critical_vulnerabilities": "dv.severity = 'Critical'",
+        "recent_scans": "ds.started > NOW() - INTERVAL '30 days'",
+        "vulnerable_assets": "fa.vulnerabilities > 0"
+      },
+      "common_aggregations": {
+        "vulnerability_counts": "COUNT(favi.vulnerability_id) as vuln_count",
+        "risk_scores": "AVG(fa.riskscore) as avg_risk",
+        "scan_dates": "MAX(ds.started) as last_scan"
+      }
+    },
+    "mcp_integration": {
+      "function_templates": {
+        "get_asset_vulnerabilities": {
+          "description": "Get vulnerabilities for a specific asset",
+          "parameters": ["asset_id"],
+          "query_template": "SELECT dv.*, favi.* FROM dim_vulnerability dv JOIN fact_asset_vulnerability_instance favi ON dv.vulnerability_id = favi.vulnerability_id WHERE favi.asset_id = {asset_id}"
+        },
+        "get_critical_vulnerabilities": {
+          "description": "Get all critical vulnerabilities",
+          "parameters": [],
+          "query_template": "SELECT dv.*, da.ip_address FROM dim_vulnerability dv JOIN fact_asset_vulnerability_instance favi ON dv.vulnerability_id = favi.vulnerability_id JOIN dim_asset da ON favi.asset_id = da.asset_id WHERE dv.severity = 'Critical'"
+        }
+      }
+    }
+  }
+}
