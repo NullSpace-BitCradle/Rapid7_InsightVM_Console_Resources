@@ -2,7 +2,6 @@
 
 > **Comprehensive documentation suite for Rapid7 InsightVM SQL Query Export interface**
 
-[![Documentation](https://img.shields.io/badge/Documentation-Complete-brightgreen)](https://github.com/yourusername/rapid7-insightvm-docs)
 [![Tables](https://img.shields.io/badge/Tables-89-blue)](./COMPLETE_TABLE_REFERENCE.md)
 [![Schema](https://img.shields.io/badge/Schema-Complete-orange)](./RAPID7_INSIGHTVM_ERD.md)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -63,6 +62,37 @@ JSON schema files for automation, query building, and MCP development
 - **MCP integration** templates and function definitions
 - **Query building helpers** and common join patterns
 - **Code generation** support for ORMs and APIs
+
+---
+
+## 📁 SQL Queries (QUERIES/)
+
+This repository includes a large collection of ready-to-run SQL examples for the InsightVM SQL Query Export interface.
+
+- **Location**: `./QUERIES/`
+- **Count**: 150+ curated queries covering assets, vulnerabilities, compliance, remediation, authentication, software, scanning, and more
+
+### How to use
+
+1. Open a query from `./QUERIES/` in your SQL client (InsightVM console database or your read replica).
+2. Review the `FROM`/`JOIN` tables and any `WHERE` filters; adjust for your environment (sites, tags, dates).
+3. Start with `LIMIT` during testing, then remove or tune for reports/dashboards.
+
+### Common starting points
+
+- **Inventory**: `ASSET_INVENTORY.sql`, `COMPREHENSIVE_ASSET_INVENTORY.sql`, `SOFTWARE_INVENTORY.sql`
+- **Risk & vulns**: `ASSETS_ORDERED_BY_RISK.sql`, `ALL_ASSETS_ALL_VULNS.sql`, `VULN_AGING.sql`
+- **Remediation**: `TOP_25_REMEDIATION_REPORT.sql`, `TOP_REMEDIATION_WITH_COUNT.sql`, `REMEDIATION_SUMMARY.sql`
+- **Compliance**: `POLICY_COMPLIANCE.sql`, `POLICY_RESULTS_AND_EXCEPTIONS.sql`, `POLICY_REPORT_WITH_DETAILS.sql`
+- **Authentication**: `LIST_ASSETS_WITH_CREDENTIAL_STATUS.sql`, `AUTHENTICATION_SERVICE_STATUS.sql`
+- **Trending**: `ASSET_GROUP_COMPARE_4_WEEK_TREND.sql`, `HISTORICAL_VULNERABILITY_FINDINGS.sql`
+- **Hot topics**: `LOG4J_QUERY_BY_INSTANCE.sql`, `TLS_1_VULNERABILITIES.sql`, `SMBV1_ENABLED.sql`
+
+### Notes
+
+- Queries are written for the InsightVM SQL export schema documented in this repo. Verify field names in your environment when needed.
+- Many queries can be filtered by site, tag, date range, or severity. Look for obvious filter predicates and tailor accordingly.
+- For performance, prefer fact tables for aggregations and add selective filters before large joins.
 
 ---
 
