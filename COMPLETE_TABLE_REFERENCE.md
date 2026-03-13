@@ -12,7 +12,7 @@ This document provides near complete documentation for all tables and functions 
 
 ---
 
-## 📊 Summary
+## Summary
 
 - **Dimension Tables:** 64
 - **Fact Tables:** 24
@@ -21,7 +21,7 @@ This document provides near complete documentation for all tables and functions 
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
 - [dim_aggregated_credential_status](#dim_aggregated_credential_status)
 - [dim_asset](#dim_asset)
