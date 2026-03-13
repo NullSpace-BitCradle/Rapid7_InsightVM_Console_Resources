@@ -8,8 +8,8 @@
     "statistics": {
       "total_tables": 89,
       "dimension_tables": 64,
-      "fact_tables": 25,
-      "functions": 0
+      "fact_tables": 24,
+      "functions": 1
     },
     "tables": {
       "dim_aggregated_credential_status": {
@@ -3944,7 +3944,7 @@
         "relationships": {}
       },
       "fact_remediation": {
-        "type": "fact",
+        "type": "function",
         "description": "The aggregate risk score for all vulnerabilities remediated by this solution.",
         "primary_key": "solution_id",
         "fields": {

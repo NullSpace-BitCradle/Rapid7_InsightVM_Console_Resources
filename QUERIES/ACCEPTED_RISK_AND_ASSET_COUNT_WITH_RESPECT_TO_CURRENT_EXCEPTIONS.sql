@@ -4,8 +4,8 @@ WITH exceptions_list AS (
    SELECT
       CASE
          WHEN dve.scope_id = 'G' THEN 'All instances across all assets'
-         WHEN dve.scope_id = 'D' THEN 'All instances on asset on asset "' || COALESCE(da.host_name, da.ip_address) || ' "'
-         WHEN dve.scope_id = 'I' THEN 'Specific instance on asset "' || da.host_name || 'or' || da.ip_address || ' "'
+         WHEN dve.scope_id = 'D' THEN 'All instances on asset "' || COALESCE(da.host_name, da.ip_address) || ' "'
+         WHEN dve.scope_id = 'I' THEN 'Specific instance on asset "' || da.host_name || ' or ' || da.ip_address || ' "'
          WHEN dve.scope_id = 'S' THEN 'All instances on this site "' || ds.name || ' "'
       END AS exceptionscope,
       COALESCE(dve.additional_comments, '') as additional_comments,

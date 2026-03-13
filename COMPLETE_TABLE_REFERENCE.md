@@ -1543,7 +1543,7 @@ This document provides near complete documentation for all tables and functions 
 **Keys & Relationships:**
 
 - **Primary Key:** `status_id`
-- **Referenced By:** [`fact_asset_vulnerability_age`](#fact_asset_vulnerability_age), [`fact_asset_vulnerability_finding`](#fact_asset_vulnerability_finding), [`fact_asset_vulnerability_instance`](#fact_asset_vulnerability_instance), [`fact_asset_vulnerability_instance_excluded`](#fact_asset_vulnerability_instance_excluded), [`fact_asset_scan_vulnerability_finding`](#fact_asset_scan_vulnerability_finding), [`fact_asset_scan_vulnerability_instance`](#fact_asset_scan_vulnerability_instance), [`fact_vulnerability`](#fact_vulnerability)
+- **Referenced By:** [`fact_asset_vulnerability_finding`](#fact_asset_vulnerability_finding), [`fact_asset_vulnerability_instance`](#fact_asset_vulnerability_instance), [`fact_asset_vulnerability_instance_excluded`](#fact_asset_vulnerability_instance_excluded), [`fact_asset_scan_vulnerability_finding`](#fact_asset_scan_vulnerability_finding), [`fact_asset_scan_vulnerability_instance`](#fact_asset_scan_vulnerability_instance), [`fact_vulnerability`](#fact_vulnerability)
 
 **Fields:**
 
@@ -2128,7 +2128,7 @@ This document provides near complete documentation for all tables and functions 
 
 > **Note:** This is a function, not a table
 
-**Description:** Accumulating snapshot fact table that tracks the age and lifecycle of vulnerabilities on assets. This table stores vulnerability age calculations, discovery dates, reintroduction tracking, and time-based metrics for vulnerability management.
+**Description:** SQL set-returning function that calculates and returns the top remediation solutions ranked by aggregate risk score. Called as `fact_remediation(count, sort_column)` where count specifies the number of results and sort_column determines the ranking order. Returns remediation recommendations with associated asset counts, vulnerability counts, and risk scores.
 
 **Keys & Relationships:**
 

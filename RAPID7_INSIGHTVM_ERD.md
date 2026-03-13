@@ -433,13 +433,12 @@ erDiagram
     }
     
     dim_scan_status {
-        integer status_id PK
-        text name
+        text status_id PK
         text description
     }
-    
+
     dim_scan_type {
-        integer type_id PK
+        text type_id PK
         text description
     }
 ```
@@ -869,12 +868,12 @@ erDiagram
     }
     
     dim_scan_status {
-        integer status_id PK
-        text name
+        text status_id PK
+        text description
     }
-    
+
     dim_scan_type {
-        integer type_id PK
+        text type_id PK
         text description
     }
     
@@ -889,8 +888,8 @@ erDiagram
     }
     
     dim_vulnerability_status {
-        integer status_id PK
-        text name
+        text status_id PK
+        text description
     }
     
     dim_exception_scope {

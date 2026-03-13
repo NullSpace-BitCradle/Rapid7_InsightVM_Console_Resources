@@ -1,3 +1,4 @@
+-- NOTE: Consider renaming to AUTHENTICATION_ATTEMPTS_STATUS.sql (redundant prefix)
 --List services that there was an authentication attempt on, per asset, and the subsequent authentication status including a WHERE statement to filter out a particular service(in this case ‘CIFS’)
 -- Copy the SQL query below
 SELECT

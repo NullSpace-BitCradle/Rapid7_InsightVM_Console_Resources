@@ -1,3 +1,5 @@
+-- WARNING: Returns ALL vulnerability findings across ALL assets with no filters.
+-- In large environments, this can return millions of rows. Consider adding WHERE clauses and/or LIMIT.
 -- asset inventory with IP, NEXPOSE_ID, VULNERABILITY TITLE, DESCRIPTION, DATA_PUBLISHED, CVSS_VECTOR, SEVERITY_SCORE
 --         SEVERITY, PCI_SEVERITY, PCI_STATUS, CVSS_SCORE, EXPLOITS (ANY NUMBER =>1 MEANS EXPLOITABLE), MALWARE_KITS (ANY NUMBER =>1 MEANS EXPLOITABLE)
 -- Copy the SQL query below

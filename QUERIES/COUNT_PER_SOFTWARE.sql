@@ -34,6 +34,7 @@ FROM
     JOIN dim_asset_vulnerability_solution davs ON davs.asset_id = da.asset_id
     JOIN dim_vulnerability_category dvc ON dvc.vulnerability_id = davs.vulnerability_id
     JOIN dim_operating_system dos ON dos.operating_system_id = da.operating_system_id
+-- WARNING: Replace '%someIPs%' with your actual site name filter before running
 Where
     da.sites like '%someIPs%'
 GROUP by
