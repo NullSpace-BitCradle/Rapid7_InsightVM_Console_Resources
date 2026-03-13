@@ -10,4 +10,5 @@ FROM
 WHERE
 	fp.scope like 'Custom'
 	AND dp.scope like 'Custom'
+	-- NOTE: Replace 'ESI%' with your organization's policy name prefix
 	AND dp.title like 'ESI%'

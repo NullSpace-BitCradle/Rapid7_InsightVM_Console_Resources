@@ -48,7 +48,7 @@ GROUP by
     end,
     CASE
         when upper(dvc.category_name) NOT like '%ADOBE%'
-        OR upper(dvc.category_name) NOT like '%ORACLE%' then 1
+        OR upper(dvc.category_name) NOT like '%JAVA%' then 1
         else null
     end,
     to_char(

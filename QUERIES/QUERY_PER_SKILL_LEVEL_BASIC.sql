@@ -1,4 +1,4 @@
--- All assets that are exploitable at a Noivce level
+-- All assets that are exploitable at a Novice level
 -- Copy the SQL query below
 SELECT
     *

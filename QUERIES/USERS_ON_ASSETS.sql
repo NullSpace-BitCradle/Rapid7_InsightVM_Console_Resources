@@ -1,3 +1,4 @@
+-- WARNING: Returns all user accounts across all assets with no filters. Consider adding WHERE/LIMIT for large environments.
 -- list users found during scans
 --Query Will Provide:
 --  name

@@ -14,7 +14,7 @@ Complete schema with all 89 tables and full field definitions
 - **Field-level metadata** for each table
 - **Best for:** Complete reference, code generation, validation
 
-### `rapid7_insightvm_schema_compact.json` (15KB)
+### `rapid7_insightvm_schema_compact.json` (7KB)
 
 Compact schema optimized for query building and MCP integration
 
@@ -157,7 +157,7 @@ function createQueryFunction(templateName, params) {
 | File | Size | Tables | Use Case |
 |------|------|--------|----------|
 | `rapid7_insightvm_complete_schema.json` | 173KB | 89 | Complete reference, code generation |
-| `rapid7_insightvm_schema_compact.json` | 15KB | 4 key tables | Query building, MCP development |
+| `rapid7_insightvm_schema_compact.json` | 7KB | 4 key tables | Query building, MCP development |
 
 ---
 

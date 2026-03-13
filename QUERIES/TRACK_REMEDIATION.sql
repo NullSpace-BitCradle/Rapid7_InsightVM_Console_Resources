@@ -154,4 +154,4 @@ FROM
 	existing_vulns AS ev FULL
 	JOIN remediated_vulns AS rv ON ev.site_id = rv.site_id FULL
 	JOIN new_vulns AS nv ON ev.site_id = nv.site_id
-	JOIN dim_site AS ds ON ev.site_id = ds.site_id
+	JOIN dim_site AS ds ON COALESCE(ev.site_id, rv.site_id, nv.site_id) = ds.site_id

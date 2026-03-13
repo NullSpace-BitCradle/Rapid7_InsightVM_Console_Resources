@@ -1,3 +1,5 @@
+-- NOTE: This query only returns assets with OS fingerprint certainty < 1.0 (low-confidence OS identification).
+-- For a complete asset inventory, see COMPREHENSIVE_ASSET_INVENTORY.sql
 -- asset inventory with site name, ip address, host name, OS description, OS certainty
 -- Copy the SQL query below
 SELECT

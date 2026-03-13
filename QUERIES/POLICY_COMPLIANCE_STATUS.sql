@@ -3,7 +3,7 @@
 -- Data Sources: Rapid7 InsightVM Reporting Data Model
 -- Grain: One row per policy rule per asset
 -- Estimated Rows: 10K-100K (policy rules tested across all assets)
-## This query passes validation but fails to fully execute thus requiring additional investigation.
+-- This query passes validation but fails to fully execute thus requiring additional investigation.
 
 SELECT
 	-- Asset information

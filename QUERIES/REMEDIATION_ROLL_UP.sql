@@ -76,9 +76,9 @@ SELECT
    da.ip_address,
    da.host_name,
    avcs.solution_summary AS summary,
-   avcs.url AS "coalesce",
+   avcs.url AS "url",
    solution_type,
-   replace(avcs.vulnerabilities, ',', '-') AS vulnerabilties,
+   replace(avcs.vulnerabilities, ',', '-') AS vulnerabilities,
    ceiling(avcs.riskscore),
    exploits,
    malware_kits
@@ -94,7 +94,7 @@ GROUP BY
    avcs.solution_summary,
    avcs.url,
    solution_type,
-   vulnerabilties,
+   vulnerabilities,
    ceiling,
    exploits,
    malware_kits
