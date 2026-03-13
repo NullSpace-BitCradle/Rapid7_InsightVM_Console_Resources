@@ -4,7 +4,7 @@
 
 ---
 
-## 🔥 Top 10 Most Used Tables
+## Top 10 Most Used Tables
 
 Based on frequency in 143 example queries:
 
@@ -23,7 +23,7 @@ Based on frequency in 143 example queries:
 
 ---
 
-## 📋 By Use Case
+## By Use Case
 
 ### Asset Inventory
 
@@ -223,7 +223,7 @@ ORDER BY favage.age_in_days DESC, dv.severity DESC;
 
 ---
 
-## 🔗 Common Joins
+## Common Joins
 
 ### Asset → Site
 
@@ -275,7 +275,7 @@ JOIN dim_asset da ON fas.asset_id = da.asset_id
 
 ---
 
-## 💡 Pro Tips
+## Pro Tips
 
 ### Filtering Tips
 
@@ -330,7 +330,7 @@ WHERE favie.vulnerability_exception_id IS NOT NULL
 
 ---
 
-## 📚 Full Documentation
+## Full Documentation
 
 For complete field lists and descriptions, see:
 

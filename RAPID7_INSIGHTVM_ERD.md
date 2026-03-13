@@ -6,7 +6,7 @@ This document provides a visual representation of the database schema relationsh
 
 ---
 
-## 🏗️ Core Schema Overview
+## Core Schema Overview
 
 ### Primary Entities
 
@@ -83,7 +83,7 @@ erDiagram
 
 ---
 
-## 🔍 Detailed Entity Relationships
+## Detailed Entity Relationships
 
 ### Asset Management
 
@@ -273,7 +273,7 @@ erDiagram
 
 ---
 
-## 📊 Fact Tables Overview
+## Fact Tables Overview
 
 ### Transaction Facts (Scan-based)
 
@@ -374,7 +374,7 @@ erDiagram
 
 ---
 
-## 🔗 Key Relationship Patterns
+## Key Relationship Patterns
 
 ### Many-to-Many Relationships
 
@@ -445,7 +445,7 @@ erDiagram
 
 ---
 
-## 📈 Usage Patterns
+## Usage Patterns
 
 ### Common Query Patterns
 
@@ -465,16 +465,16 @@ erDiagram
 
 ---
 
-## 📚 Related Documentation
+## Related Documentation
 
 - **[COMPLETE_TABLE_REFERENCE.md](COMPLETE_TABLE_REFERENCE.md)** - Complete field documentation
 - **[QUICK_TABLE_LOOKUP.md](QUICK_TABLE_LOOKUP.md)** - Quick reference guide
 
 ---
 
-## 🗺️ Complete Schema Map
+## Complete Schema Map
 
-**⚠️ Warning: This is a comprehensive view of all 89 tables and their relationships. It's complex but useful for understanding the complete data model.**
+**Warning: This is a comprehensive view of all 89 tables and their relationships. It's complex but useful for understanding the complete data model.**
 
 ### Core Entities & Primary Relationships
 

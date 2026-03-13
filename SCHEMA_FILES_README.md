@@ -2,7 +2,7 @@
 
 This directory contains machine-readable JSON schema files for the Rapid7 InsightVM SQL Query Export interface, designed for automation, query building, and MCP development.
 
-## 📁 Files Overview
+## Files Overview
 
 ### `rapid7_insightvm_complete_schema.json` (173KB)
 
@@ -24,7 +24,7 @@ Compact schema optimized for query building and MCP integration
 - **Query building helpers** and examples
 - **Best for:** Quick reference, query automation, MCP development
 
-## 🎯 Use Cases
+## Use Cases
 
 ### Query Builder Automation
 
@@ -62,7 +62,7 @@ Compact schema optimized for query building and MCP integration
 - **Validation schemas** from constraints
 - **Type definitions** from data types
 
-## 🔧 Technical Details
+## Technical Details
 
 ### Schema Structure
 
@@ -113,7 +113,7 @@ Compact schema optimized for query building and MCP integration
 - **bool** - Boolean values
 - **real** - Floating-point numbers
 
-## 🚀 Integration Examples
+## Integration Examples
 
 ### Python Query Builder
 
@@ -145,14 +145,14 @@ function createQueryFunction(templateName, params) {
 }
 ```
 
-## ⚠️ Important Notes
+## Important Notes
 
 - **Not officially verified** by Rapid7
 - **Schema may vary** between InsightVM versions
 - **Always validate** field names in your environment
 - **Use as reference** for automation, not as specification
 
-## 📊 File Statistics
+## File Statistics
 
 | File | Size | Tables | Use Case |
 |------|------|--------|----------|
