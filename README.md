@@ -38,7 +38,7 @@ This repository contains the most comprehensive documentation available for the 
 | File | Description |
 |------|-------------|
 | [Complete Table Reference](./COMPLETE_TABLE_REFERENCE.md) | All 89 tables with field descriptions, data types, constraints, and key relationships (64 dimension + 24 fact + 1 function) |
-| [Quick Table Lookup](./QUICK_TABLE_LOOKUP.md) | Top 10 tables, use-case organization, ready-to-use SQL examples, join patterns, and performance tips |
+| [Quick Table Lookup](./QUICK_TABLE_LOOKUP.md) | Most-used tables, use-case organization, ready-to-use SQL examples, join patterns, and performance tips |
 | [Entity Relationship Diagram](./RAPID7_INSIGHTVM_ERD.md) | Mermaid diagrams showing table relationships, fact vs. dimension organization, and bridge tables |
 | [Schema Files Guide](./SCHEMA_FILES_README.md) | JSON schema files for automation, query building, MCP development, and code generation |
 
