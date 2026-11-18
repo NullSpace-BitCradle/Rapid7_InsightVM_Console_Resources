@@ -2,6 +2,7 @@
   "schema": {
     "name": "rapid7_insightvm_sql_export",
     "version": "1.0.0",
+    "last_updated": "2025-10-12",
     "description": "Rapid7 InsightVM SQL Query Export Schema - Machine-readable reference for automation",
     "disclaimer": "This schema represents the most complete reference available but is not officially verified by Rapid7",
     "statistics": {
@@ -93,7 +94,7 @@
       "fact_asset_vulnerability_instance": {
         "type": "fact",
         "description": "Individual vulnerability instances per asset",
-        "primary_key": "asset_id, vulnerability_id, date",
+        "primary_key": "asset_id, vulnerability_id, port, key",
         "key_fields": ["asset_id", "vulnerability_id", "date", "status_id", "proof", "port"],
         "relationships": {
           "many_to_one": ["dim_asset", "dim_vulnerability"]
