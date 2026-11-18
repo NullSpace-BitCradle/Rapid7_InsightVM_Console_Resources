@@ -4,7 +4,7 @@ This repository is a documentation set about the InsightVM reporting data model 
 
 ## Rapid7 example queries (QUERIES/)
 
-Most of the files in `QUERIES/` are copies of queries published in the public Rapid7 repository:
+Most of the 149 files in `QUERIES/` are copies of queries published in the public Rapid7 repository:
 
 - https://github.com/rapid7/insightvm-sql-queries
 
@@ -12,8 +12,8 @@ I compared every file in `QUERIES/` against that repository (checked 2026-11-18,
 
 | Result | Files |
 |--------|-------|
-| Same SQL as a file in the Rapid7 repository | 132 |
-| Close variant of a file in the Rapid7 repository (small edits or fixes) | 8 |
+| Same SQL as a file in the Rapid7 repository | 131 |
+| Close variant of a file in the Rapid7 repository (small edits or fixes) | 9 |
 | No match in the Rapid7 repository | 9 |
 
 The 9 with no match are `ASSET_SERVICES_DETAIL`, `ASSET_SOFTWARE_DETAIL`, `COMPREHENSIVE_ASSET_INVENTORY`, `CURRENT_VULNERABILITY_SNAPSHOT`, `EXECUTIVE_SUMMARY_QUERY`, `HISTORICAL_VULNERABILITY_FINDINGS`, `POLICY_COMPLIANCE_STATUS`, `REMEDIATION_EXCEPTION_TRACKING` and `WEEKLY_INCREMENTAL_VULNERABILITIES`. "No match" means only that I found no copy in that one repository. This repo does not record where those 9 came from.
