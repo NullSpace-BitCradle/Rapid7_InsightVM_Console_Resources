@@ -2,6 +2,7 @@
   "schema": {
     "name": "rapid7_insightvm_sql_export",
     "version": "1.0.0",
+    "last_updated": "2025-10-12",
     "description": "Rapid7 InsightVM SQL Query Export Schema - Complete machine-readable reference",
     "source": "Generated from COMPLETE_TABLE_REFERENCE.md and RAPID7_INSIGHTVM_ERD.md",
     "disclaimer": "This schema represents the most complete reference available but is not officially verified by Rapid7",

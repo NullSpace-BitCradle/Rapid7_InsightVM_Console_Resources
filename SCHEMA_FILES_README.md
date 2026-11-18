@@ -102,6 +102,10 @@ Compact schema optimized for query building and MCP integration
 }
 ```
 
+**Primary keys:** in the complete schema, `primary_key` holds a single column name, and is `null` for tables whose key is composite or not stated. Composite keys are listed in [COMPLETE_TABLE_REFERENCE.md](./COMPLETE_TABLE_REFERENCE.md). The compact file writes the composite key it lists as a comma-separated string.
+
+**Dates:** both files carry `version` (1.0.0) and `last_updated` (2025-10-12).
+
 ### Data Types Supported
 
 - **bigint** - Large integers (asset_id, scan_id)
@@ -162,4 +166,4 @@ function createQueryFunction(templateName, params) {
 ---
 
 **Generated from:** COMPLETE_TABLE_REFERENCE.md and RAPID7_INSIGHTVM_ERD.md  
-**Last updated:** January 2025
+**Schema files last updated:** 2025-10-12 (the same date as the generated COMPLETE_TABLE_REFERENCE.md)

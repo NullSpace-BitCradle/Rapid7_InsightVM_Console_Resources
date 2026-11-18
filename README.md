@@ -3,7 +3,7 @@
 > **Comprehensive documentation suite for Rapid7 InsightVM SQL Query Export interface**
 
 [![Tables](https://img.shields.io/badge/Tables-89-blue)](./COMPLETE_TABLE_REFERENCE.md)
-[![Queries](https://img.shields.io/badge/Queries-151-green)](./QUERIES/)
+[![Queries](https://img.shields.io/badge/Queries-149-green)](./QUERIES/)
 [![Schema](https://img.shields.io/badge/Schema-Complete-orange)](./RAPID7_INSIGHTVM_ERD.md)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -38,15 +38,17 @@ This repository contains the most comprehensive documentation available for the 
 | File | Description |
 |------|-------------|
 | [Complete Table Reference](./COMPLETE_TABLE_REFERENCE.md) | All 89 tables with field descriptions, data types, constraints, and key relationships (64 dimension + 24 fact + 1 function) |
-| [Quick Table Lookup](./QUICK_TABLE_LOOKUP.md) | Top 10 tables, use-case organization, ready-to-use SQL examples, join patterns, and performance tips |
-| [Entity Relationship Diagram](./RAPID7_INSIGHTVM_ERD.md) | Mermaid diagrams showing table relationships, fact vs. dimension organization, and bridge tables |
+| [Quick Table Lookup](./QUICK_TABLE_LOOKUP.md) | Most-used tables, use-case organization, ready-to-use SQL examples, join patterns, and performance tips |
+| [Entity Relationship Diagram](./RAPID7_INSIGHTVM_ERD.md) | Mermaid diagrams showing table relationships, fact vs. dimension organization, and bridge tables (partial: 69 of the 89 tables, the omitted ones are listed in the file) |
 | [Schema Files Guide](./SCHEMA_FILES_README.md) | JSON schema files for automation, query building, MCP development, and code generation |
 
 ---
 
 ## SQL Queries
 
-151 ready-to-run SQL queries in [`./QUERIES/`](./QUERIES/), organized by use case:
+149 example SQL queries in [`./QUERIES/`](./QUERIES/), organized by use case. Most are copied from Rapid7's public `insightvm-sql-queries` repository, not written here; see [NOTICE.md](./NOTICE.md) for the breakdown and terms. Test each one against your own data before relying on it.
+
+The tables below group example queries by theme; the files themselves are not sorted into folders.
 
 | Category | Example Queries | Description |
 |----------|----------------|-------------|
@@ -67,7 +69,7 @@ This repository contains the most comprehensive documentation available for the 
 1. Open a query from `./QUERIES/` in the InsightVM SQL Query Export console or your PostgreSQL client
 2. Review the `FROM`/`JOIN` tables and any `WHERE` filters -- adjust for your environment (sites, tags, dates)
 3. Start with `LIMIT` during testing, then remove or tune for reports and dashboards
-4. Many queries include header comments with purpose, data sources, and estimated row counts
+4. Read the comment at the top of the file. Most queries start with a one-line comment saying what they return. A few (such as `EXECUTIVE_SUMMARY_QUERY`) have a fuller header with purpose and data sources. Row counts are rarely stated
 
 ### Performance Tips
 
@@ -166,11 +168,9 @@ ORDER BY fap.rule_compliance ASC;
 - **SQL knowledge** for query construction
 - **PostgreSQL** (for local console access)
 
-### Supported Versions
+### Versions
 
-- **InsightVM 6.x** and later
-- **PostgreSQL 9.x** and later
-- **SQL Query Export** interface
+No minimum InsightVM or PostgreSQL version has been verified for this documentation. The schema was documented from Rapid7's public reporting data model pages and may not match your console version. Check the tables and columns in your own console before relying on them.
 
 ---
 
@@ -186,12 +186,14 @@ ORDER BY fap.rule_compliance ASC;
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+The original work in this repository is licensed under the MIT License; see the [LICENSE](LICENSE) file.
+
+Not everything here is original. Most of the example queries come from Rapid7's public repository (MIT, Copyright (c) 2022 Rapid7), and the table descriptions are based on Rapid7's documentation, whose reuse terms I have not confirmed. [NOTICE.md](./NOTICE.md) has the details and Rapid7's license text.
 
 ---
 
 ## Acknowledgments
 
-- **Rapid7** for the InsightVM platform and SQL Query Export interface
+- **Rapid7** for the InsightVM platform, the SQL Query Export interface, the public [insightvm-sql-queries](https://github.com/rapid7/insightvm-sql-queries) repository that most example queries come from, and the reporting data model documentation
 - **Vulnerability management community** for feedback and contributions
 - **Security teams** who provided real-world use cases and examples

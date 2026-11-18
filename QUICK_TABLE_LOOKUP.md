@@ -4,22 +4,24 @@
 
 ---
 
-## Top 10 Most Used Tables
+## Most Used Tables
 
-Based on frequency in 143 example queries:
+Counted over the 149 example queries in `./QUERIES/`: the number of query files with the table in a `FROM` or `JOIN` clause (comments ignored, each file counted once per table). The count only shows how often the example queries use a table, not how important it is. Three tables tie for tenth place at 15 files.
 
-| Rank | Table | Usage Count | Purpose | Key Fields |
+| Rank | Table | Query Files | Purpose | Key Fields |
 |------|-------|-------------|---------|------------|
-| 1 | `fact_asset` | 67 | Asset vulnerability summary | `asset_id`, `vulnerabilities`, `critical_vulnerabilities`, `riskscore` |
-| 2 | `dim_asset` | 48 | Asset master data | `asset_id`, `ip_address`, `host_name`, `operating_system_id` |
-| 3 | `fact_asset_vulnerability_instance` | 31 | Vulnerability instances per asset | `asset_id`, `vulnerability_id`, `date`, `status_id`, `proof`, `port` |
-| 4 | `dim_vulnerability` | 28 | Vulnerability definitions | `vulnerability_id`, `title`, `severity`, `cvss_score`, `exploits` |
-| 5 | `dim_site` | 20 | Site configuration | `site_id`, `name`, `description`, `last_scan_id` |
-| 6 | `fact_asset_scan` | 18 | Per-scan asset metrics | `asset_id`, `scan_id`, `scan_started`, `vulnerabilities` |
-| 7 | `dim_scan` | 16 | Scan details | `scan_id`, `started`, `finished`, `status_id`, `scan_name` |
-| 8 | `dim_asset_vulnerability_solution` | 14 | Solutions per vuln per asset | `asset_id`, `vulnerability_id`, `solution_id` |
-| 9 | `dim_solution` | 13 | Remediation solutions | `solution_id`, `summary`, `fix`, `solution_type` |
-| 10 | `dim_site_asset` | 12 | Asset-to-site mapping | `site_id`, `asset_id` |
+| 1 | `dim_asset` | 124 | Asset master data | `asset_id`, `ip_address`, `host_name`, `operating_system_id` |
+| 2 | `dim_vulnerability` | 56 | Vulnerability definitions | `vulnerability_id`, `title`, `severity`, `cvss_score`, `exploits` |
+| 3 | `dim_operating_system` | 42 | Operating system details | `operating_system_id`, `description`, `vendor`, `family`, `name`, `version` |
+| 4 | `dim_site` | 40 | Site configuration | `site_id`, `name`, `description`, `last_scan_id` |
+| 5 | `dim_site_asset` | 30 | Asset-to-site mapping | `site_id`, `asset_id` |
+| 6 | `fact_asset` | 29 | Asset vulnerability summary | `asset_id`, `vulnerabilities`, `critical_vulnerabilities`, `riskscore` |
+| 7 | `dim_solution` | 21 | Remediation solutions | `solution_id`, `summary`, `fix`, `solution_type` |
+| 8 | `dim_scan` | 20 | Scan details | `scan_id`, `started`, `finished`, `status_id`, `scan_name` |
+| 9 | `fact_asset_vulnerability_instance` | 17 | Vulnerability instances per asset | `asset_id`, `vulnerability_id`, `date`, `status_id`, `proof`, `port` |
+| 10 (tie) | `dim_asset_operating_system` | 15 | OS fingerprints per asset | `asset_id`, `operating_system_id`, `fingerprint_source_id`, `certainty` |
+| 10 (tie) | `fact_asset_vulnerability_finding` | 15 | Findings per asset | `asset_id`, `scan_id`, `vulnerability_id`, `date`, `vulnerability_instances` |
+| 10 (tie) | `dim_service` | 15 | Service names | `service_id`, `name` |
 
 ---
 
