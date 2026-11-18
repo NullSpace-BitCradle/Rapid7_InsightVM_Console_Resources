@@ -4,6 +4,8 @@
 
 This document provides a visual representation of the database schema relationships using Mermaid diagrams.
 
+> **This ERD is partial.** It covers 69 of the 89 tables. These 20 are not drawn here: `dim_aggregated_credential_status`, `dim_asset_group_account`, `dim_asset_scan`, `dim_asset_service_configuration`, `dim_asset_unique_id`, `dim_policy_override`, `dim_policy_result_status`, `dim_policy_rule_cce_platform_nist_control_mapping`, `dim_policy_rule_test`, `dim_scope_asset_group`, `dim_scope_site`, `dim_service_fingerprint`, `dim_site_target`, `dim_solution_highest_supercedence`, `dim_solution_prerequisite`, `dim_solution_supercedence`, `dim_vulnerability_category`, `dim_vulnerability_exploit`, `dim_vulnerability_malware_kit`, `dim_vulnerability_reference`. See [COMPLETE_TABLE_REFERENCE.md](./COMPLETE_TABLE_REFERENCE.md) for all 89.
+
 ---
 
 ## Core Schema Overview
